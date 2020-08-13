@@ -19,11 +19,18 @@ if True:
         print(str(to_ret))
         return str(to_ret)
 
-    
+    def user_exists(name):
+        c.execute("SELECT * FROM users WHERE username='" + name + "'")
+        data = c.fetchall()
+        if len(data) == 1:
+            return 1
+        else:
+            return 0
+        conn.commit()
 
-    def add_user(name, pw, coins=1):
+    def add_user(name, pw, email):
         if check_access(name, "NICHTWICHTIG") == 2:     #Noch kein User mit diesem Namen
-            c.execute("INSERT INTO " + DB_NAME + " VALUES ('" + str(name) + "','" + hash_string(pw) + "'," + str(coins) + ")")
+            c.execute("INSERT INTO " + DB_NAME + " VALUES ('" + str(name) + "','" + hash_string(pw) + "','" + str(email) + "')")
             conn.commit()
             return 0;
         else:
@@ -103,9 +110,11 @@ if(__name__=="__main__"):
             args = str_in.split(" ")
 
             if args[0]=="add":
-                add_user(args[1],args[2])
+                add_user(args[1],args[2], args[3])
             elif args[0]=="check":
                 print(check_access(args[1],args[2]))
+            if args[0]=="exists":
+                print(user_exists(args[1]))
             elif args[0]=="set_pw":
                 set_user_pw(args[1],args[2])
             elif args[0] == "set_coins":
