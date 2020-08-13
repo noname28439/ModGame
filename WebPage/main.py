@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, session
 
 import dataBaseManager as DBM
 
@@ -35,6 +35,9 @@ def login():
 
     elif request.method == "GET":
         return render_template("login.html")
+@app.route("/Jonathan")
+def jonathan():
+    return render_template("jonathan.html")
 
 
 
