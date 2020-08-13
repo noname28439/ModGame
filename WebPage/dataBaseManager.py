@@ -19,7 +19,7 @@ if True:
         print(str(to_ret))
         return str(to_ret)
 
-
+    
 
     def add_user(name, pw, coins=1):
         if check_access(name, "NICHTWICHTIG") == 2:     #Noch kein User mit diesem Namen
@@ -51,39 +51,16 @@ if True:
         c.execute(tosend)
         conn.commit()
 
-    def set_user_coins(name, new_coins):
-        c.execute("UPDATE " + DB_NAME + " SET coins = " + str(new_coins) + " WHERE username = '" + str(name) + "'")
+    def set_user_email(name, new_email):
+        c.execute("UPDATE " + DB_NAME + " SET email = " + str(new_email) + " WHERE username = '" + str(name) + "'")
         conn.commit()
 
-    def get_user_coins(name):
-        c.execute("SELECT coins FROM users WHERE username='" + name + "'")
+    def get_user_email(name):
+        c.execute("SELECT email FROM users WHERE username='" + name + "'")
         data = c.fetchall()
         conn.commit()
         return data[0][0]
 
-    def remove_user_coins(name, amount):
-        if get_user_coins(name)>=amount:
-            set_user_coins(name, get_user_coins(name)-int(amount))
-            return 0
-        return 1
-
-    def add_user_coins(name, amount):
-        set_user_coins(name, get_user_coins(name) + int(amount))
-
-    def use_user_coins(name, amount, to_run):
-        if has_user_coins(name, amount):
-            remove_user_coins(name, amount)
-            to_run()
-
-    def has_user_coins_consume(name, amount):
-        if has_user_coins(name, amount):
-            remove_user_coins(name, amount)
-            return True
-        else:
-            return False
-
-    def has_user_coins(name, amount):
-        return get_user_coins(name)>=amount
 
     def read_table():
         c.execute("SELECT * FROM users")
@@ -106,7 +83,7 @@ if True:
         c.execute("""CREATE TABLE users (
             username text,
             password text,
-            coins integer
+            email text
         )""")
         conn.commit()
 
