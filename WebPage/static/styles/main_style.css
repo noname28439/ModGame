@@ -3,8 +3,49 @@
 body{
 
 
-
 }
 
 
+.logininput{
+    padding: 0px;
+    padding-top: 20px;
+    padding-left: 20px;
+    margin: 0px;
+    font-size: xx-large;
 
+}
+
+.logininput input[type=text]{
+    font-size: xx-large;
+
+}
+
+.logininput input[type=password]{
+    font-size: xx-large;
+}
+
+.logininput input[type=submit]{
+    font-size: xx-large;
+    margin-bottom: 10px;
+    width: 200px;
+    font-family: Impact;
+}
+
+.logindiv{
+    background-color: lightgray;
+    width: 500px;
+    border-radius: 20px;
+    border-style: solid;
+    border-color: black;
+}
+
+.header{
+    font-family: Impact;
+    text-decoration: underline;
+    font-size: 300%;
+    padding: 2px;
+    padding-left: 30px;
+    padding-bottom: 10px;
+    margin: 0px;
+
+}
