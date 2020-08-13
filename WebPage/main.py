@@ -12,15 +12,14 @@ app.secret_key = SECRET_KEY
 
 DBM.set_pw_salt(SECRET_KEY)
 
+#@app.route("/")
+#def index():
+#    return  render_template("base.html")
+
+
+
+
 @app.route("/")
-def index():
-    return  render_template("base.html")
-
-@app.route("/home")
-def home():
-    return render_template("index.html")
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -32,7 +31,13 @@ def login():
     elif request.method == "GET":
         return render_template("login.html")
 
-
+@app.route("/home")
+def home():
+    return render_template("base.html")
+    if request.method["POST"]:
+        logout = request.form["submit"]
+    else:
+        return render_template("login.html")
 
 @app.route("/Jonathan")
 def jonathan():
