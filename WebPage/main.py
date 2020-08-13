@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, session, Markup
+from flask import Flask, render_template, request, url_for, session, Markup, redirect
 
 import dataBaseManager as DBM
 
@@ -18,8 +18,11 @@ DBM.set_pw_salt(SECRET_KEY)
 
 
 
-
 @app.route("/")
+def index():
+    return redirect("/login")
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -33,6 +36,18 @@ def login():
             return Markup("<h1>Fehler: Falsches Passwort</h1>")
         elif access == 2:       #Wrong Username
             return Markup("<h1>Fehler: Falscher Nutzername</h1>")
+
+    elif request.method == "GET":
+        return render_template("login.html")
+    
+    
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        name = request.form["username"]
+        pw = request.form["password"]
+        result = DBM.add_user(name, pw)
+
 
     elif request.method == "GET":
         return render_template("login.html")

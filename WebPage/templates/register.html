@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main_style.css') }}">
+</head>
+<body>
+
+
+<h1 class="header">User Registration Panel</h1>
+
+<div class="logindiv">
+    <form action="/login" method="post" target="_self">
+        <p class="logininput">Username: <input type="text" name="username"></p>
+        <p class="logininput">Password: <input type="password" name="password"></p>
+        <p class="logininput"><input type="submit" value="Register"></p>
+    </form>
+</div>
+
+
+
+</body>
+</html>
