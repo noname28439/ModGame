@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, session
+from flask import Flask, render_template, request, url_for, session, Markup
 
 import dataBaseManager as DBM
 
@@ -27,6 +27,12 @@ def login():
         pw = request.form["password"]
         access = DBM.check_access(name, pw)
 
+        if access == 0:         #Access
+            return Markup("<h1>Wilkommen, "+name+"</h1>")
+        elif access == 1:       #Wrong PW
+            return Markup("<h1>Fehler: Falsches Passwort</h1>")
+        elif access == 2:       #Wrong Username
+            return Markup("<h1>Fehler: Falscher Nutzername</h1>")
 
     elif request.method == "GET":
         return render_template("login.html")
