@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, session, Markup, redirect
+from flask import Flask, render_template, request, url_for, session, Markup, redirect, jsonify
 
 import dataBaseManager as DBM
 
@@ -20,7 +20,14 @@ DBM.set_pw_salt(SECRET_KEY)
 
 @app.route("/")
 def index():
-    return redirect("/login")
+    return redirect("/bestPlayers")
+
+@app.route("/rank/bestPlayers")
+def index():
+    return render_template("scores.html")
+@app.route("/rank/requestAPI", methods=["POST"])
+def index():
+    return jsonify(["Fred","Björn","Günter"])
 
 
 @app.route("/login", methods=["GET", "POST"])
