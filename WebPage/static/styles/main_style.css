@@ -1,10 +1,35 @@
 
 
 body{
-
+    background-color: lightgray;
 
 }
 
+#PlayerRankSystemMainDiv{
+
+    border-radius: 20px;
+    border-style: solid;
+    border-color: black;
+    padding: 20px;
+    margin: 20px;
+    background-color: black;
+}
+
+#PlayerRankSystemPlayerList li{
+    font-size: 500%;
+    text-align: center;
+    background-color: red;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 10px;
+    font-family: Impact;
+    font-size: 500%;
+}
+
+.PlayerRankSystemPlayerLine{
+
+}
 
 .logininput{
     padding: 0px;

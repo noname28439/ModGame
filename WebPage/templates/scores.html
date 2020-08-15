@@ -3,11 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Player Score List</title>
+    <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='styles/main_style.css')}}">
 </head>
 <body>
 
 
 
+
+<h1 class="header">Best Players currently on the Server</h1>
+
+
+<div id="PlayerRankSystemMainDiv">
+        <ol id="PlayerRankSystemPlayerList">
+
+
+
+        </ol>
+
+
+</div>
+
+
+<script src="{{url_for('static', filename='scripts/PlayerRankLoader.js')}}"></script>
 
 </body>
 </html>

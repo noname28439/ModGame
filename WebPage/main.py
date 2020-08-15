@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for, session, Markup, redirect, jsonify
-
+import random
 import dataBaseManager as DBM
 
 
@@ -20,14 +20,19 @@ DBM.set_pw_salt(SECRET_KEY)
 
 @app.route("/")
 def index():
-    return redirect("/bestPlayers")
+    return redirect("/rank/bestPlayers")
+
+
+fakePlayerScoreList = ["S.Bot_1:2865","S.Bot_7:2864","XVC-Bot:2984","GG:2865","Noname:1480","S.Bot_4:2863","A:1003","TestClient:307","NoBot:2"]
 
 @app.route("/rank/bestPlayers")
-def index():
+def rank_page():
     return render_template("scores.html")
 @app.route("/rank/requestAPI", methods=["POST"])
-def index():
-    return jsonify(["Fred","Björn","Günter"])
+def rank_api():
+    chosenSlot = random.randint(0,len(fakePlayerScoreList)-1)
+    fakePlayerScoreList[chosenSlot] = fakePlayerScoreList[chosenSlot].split(":")[0]+":"+str(int(fakePlayerScoreList[chosenSlot].split(":")[1])+1)
+    return jsonify(fakePlayerScoreList)
 
 
 @app.route("/login", methods=["GET", "POST"])
