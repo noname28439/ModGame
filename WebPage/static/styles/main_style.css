@@ -1,5 +1,52 @@
 
 
+
+
+ul.navi{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 15%;
+    background-color: dimgrey;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    border-color: black;
+    border-style: solid;
+    border-radius: 8px;
+    border-width: 5px;
+}
+
+ul.navi li a {
+    border-style: solid;
+    border-color: aliceblue;
+    display: block;
+    padding: 10px 10px 10px 10px;
+    text-decoration: none;
+    font-size: x-large;
+}
+
+ul.navi li a:hover {
+    background-color: aquamarine;
+    color: black;
+    font-size: 150%;
+}
+
+#gb-erc{
+    margin-left: 15%;
+    padding: 2px 15px;
+}
+a:visited.wasonpage{
+    color: greenyellow;
+}
+a:link.wasonpage{
+    color: red;
+}
+
+
+
+
+
 body{
     background-color: lightgray;
 

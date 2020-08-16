@@ -17,6 +17,26 @@ DBM.set_pw_salt(SECRET_KEY)
 #    return  render_template("base.html")
 
 
+naviBar = Markup("""
+
+<ul class="navi">
+    <li><a class="aktiv wasonpage" href="/rank/bestPlayers">Scores</a> </li>
+    <li><a class="aktiv wasonpage" href="/login">Login</a></li>
+    <li><a class="aktiv wasonpage" href="/register">Registration</a></li>
+    <li><a class="aktiv wasonpage" href="#"></a></li>
+    <li><a class="aktiv wasonpage" href="#">Admin Login</a></li>
+</ul>
+
+""")
+
+"""
+<li><a class="aktiv wasonpage" target="_blank" href="https://www.instagram.com/nicht_leon0/">Instagram</a></li>
+    <li><a class="aktiv wasonpage" target="_blank" href="https://www.youtube.com/channel/UCHCaqURRYqQA7bEgLO-Rxbw?view_as=subscriber">Youtube</a></li>
+    <li><a class="aktiv wasonpage" target="_blank" href="https://www.instagram.com/jhonjirwin_official/">Ehrenmann</a></li>
+    <li><a class="aktiv wasonpage" target="_blank" href="https://www.aes-maintal.de">Schule (mittelmäßig)</a></li>
+"""
+
+
 
 @app.route("/")
 def index():
@@ -27,7 +47,7 @@ fakePlayerScoreList = ["S.Bot_1:2865","S.Bot_7:2864","XVC-Bot:2984","GG:2865","N
 
 @app.route("/rank/bestPlayers")
 def rank_page():
-    return render_template("scores.html")
+    return render_template("scores.html", PY_NAVIBAR=naviBar)
 @app.route("/rank/requestAPI", methods=["POST"])
 def rank_api():
     chosenSlot = random.randint(0,len(fakePlayerScoreList)-1)
@@ -50,7 +70,7 @@ def login():
             return Markup("<h1>Fehler: Falscher Nutzername</h1>")
 
     elif request.method == "GET":
-        return render_template("login.html")
+        return render_template("login.html", PY_NAVIBAR=naviBar)
     
     
 @app.route("/register", methods=["GET", "POST"])
@@ -62,7 +82,19 @@ def register():
 
 
     elif request.method == "GET":
-        return render_template("login.html")
+        return render_template("register.html", PY_NAVIBAR=naviBar)
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route("/home")
 def home():
