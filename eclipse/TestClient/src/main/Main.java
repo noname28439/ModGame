@@ -1,5 +1,7 @@
 package main;
 
+import connection.Client;
+
 public class Main {
 
 	static Thread displayThread;
@@ -8,6 +10,7 @@ public class Main {
 		displayThread = new Thread(new display.Main());
 		displayThread.start();
 		
+		Client.connect("localhost", 25565);
 		
 	}
 	

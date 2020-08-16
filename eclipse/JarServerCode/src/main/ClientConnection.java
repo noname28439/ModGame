@@ -11,6 +11,7 @@ public class ClientConnection implements Runnable{
 	String name;
 	PrintStream out;
 	Scanner in;
+	Thread listener;
 	
     public ClientConnection(Socket connection){
     	this.connection = connection;
@@ -21,9 +22,8 @@ public class ClientConnection implements Runnable{
 		} catch (IOException e) {}
     	
     	
-    	
-    	
-    	
+    	listener = new Thread(this);
+    	listener.start();
 
     }
     
@@ -34,13 +34,27 @@ public class ClientConnection implements Runnable{
 
 	@Override
 	public void run() {
+		try {
 		while(true) {
-			String recv = in.nextLine();
-			String[] args = recv.split(":");
+			
+				String recv = in.nextLine();
+				System.err.println("[FROM_CLIENT] --> "+recv);
+				String[] args = recv.split(":");
+				
+				if(recv.equalsIgnoreCase("test")) {
+					sendMessage("test angekommen!");
+				}
 			
 			
 		}
-		
+		} catch (java.util.NoSuchElementException e) {
+			if(name == null) {
+				Main.clog("Ein nicht verifizierter Client hat sich wieder ausgeloggt!");
+			}else {
+				Main.clog(" "+name+" hat sich ausgeloggt!");
+			}
+			
+		}
 	}
 
     
