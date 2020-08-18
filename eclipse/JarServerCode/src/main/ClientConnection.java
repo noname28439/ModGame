@@ -16,7 +16,6 @@ public class ClientConnection implements Runnable{
 	Thread listener;
 	
 	
-	
     public ClientConnection(Socket connection){
     	this.connection = connection;
     	
@@ -82,6 +81,8 @@ public class ClientConnection implements Runnable{
 					
 					
 					
+					
+					
 				}else {
 					//Login
 					if(args[0].equalsIgnoreCase("login")) {
@@ -89,6 +90,7 @@ public class ClientConnection implements Runnable{
 						
 						switch (result) {
 						case 0:	//Zugriff gewährt
+							name=args[1];
 							sendInfoMessage("Login successfull");
 							break;
 						case 1:	//Falsches Passwort
