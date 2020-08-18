@@ -1,6 +1,6 @@
 if True:
     import sqlite3
-    import  hashlib
+    import hashlib
 
 
     conn = sqlite3.connect("userDB.db",  check_same_thread=False)
@@ -13,11 +13,7 @@ if True:
         PW_SALT = salt
 
     def hash_string(input):
-        to_ret = str(hashlib.pbkdf2_hmac('sha256',input.encode('utf-8'),PW_SALT,100000))
-        while "'" in to_ret:
-            to_ret = to_ret.replace("'", "")
-        print(str(to_ret))
-        return str(to_ret)
+        return str(hashlib.sha256(input.encode('utf-8')).hexdigest())
 
     def user_exists(name):
         c.execute("SELECT * FROM users WHERE username='" + name + "'")
