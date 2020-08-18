@@ -5,6 +5,8 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+import settings.Settings;
+
 public class ClientConnection implements Runnable{
 
 	Socket connection;
@@ -29,14 +31,39 @@ public class ClientConnection implements Runnable{
 
     }
     
+    
+    //Basic Connection Functions
     public void sendMessage(String text) {
     	out.println(text);
     	out.flush();
     }
     
+    //Advanced Connection Functions
+    public void sendErrorMessage(String text) {
+    	out.println(createMesssage(new String[]{"MESSAGE","ERROR",text}));
+    	out.flush();
+    }
+    
+    public void sendInfoMessage(String text) {
+    	out.println(createMesssage(new String[]{"MESSAGE","INFO",text}));
+    	out.flush();
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //helping Functions
     public boolean isLoggedIn() {
     	return !(name == null);
     }
+    
+    
     
     
 	@Override
@@ -45,7 +72,7 @@ public class ClientConnection implements Runnable{
 		while(true) {
 				String recv = in.nextLine();
 				System.err.println("[FROM_CLIENT] --> "+recv);
-				String[] args = recv.split(":");
+				String[] args = recv.split(Settings.connection_message_seperator);
 				
 				
 				
@@ -57,8 +84,23 @@ public class ClientConnection implements Runnable{
 					
 				}else {
 					//Login
-					if(recv.equalsIgnoreCase("login")) {
+					if(args[0].equalsIgnoreCase("login")) {
+						int result = DataBaseHandeler.checkPlayerAccess(args[1], args[2]);
 						
+						switch (result) {
+						case 0:	//Zugriff gewährt
+							sendInfoMessage("Login successfull");
+							break;
+						case 1:	//Falsches Passwort
+							sendErrorMessage("Wrong password");
+							break;
+						case 2:	//Falscher Nutzername
+							sendErrorMessage("Wrong username");
+							break;
+
+						default:
+							break;
+						}
 						
 					}
 				}
@@ -79,5 +121,21 @@ public class ClientConnection implements Runnable{
 
     
     
+	
+	//static helping Functions
+	public static String escape(String text) {
+		return text.replaceAll(Settings.connection_message_seperator, "{{"+Settings.connection_message_seperator+"}}");
+	}
+	public static String createMesssage(String[] args) {
+		String result = "";
+		for (int i = 0; i < args.length; i++) {
+			if(i+1 == args.length)
+				result+=args[i];
+			else
+				result+=args[i]+Settings.connection_message_seperator;
+		}
+		return result;
+	}
+	
 
 }

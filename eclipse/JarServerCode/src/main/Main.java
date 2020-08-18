@@ -28,7 +28,8 @@ public class Main {
             e.printStackTrace();
         }
         
-        DataBaseHandeler.checkPlayerAccess("Noname", "pw");
+        
+        
         
         while(true) {
         	try {
