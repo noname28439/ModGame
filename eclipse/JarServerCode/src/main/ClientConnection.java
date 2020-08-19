@@ -113,9 +113,9 @@ public class ClientConnection implements Runnable{
 		}
 		} catch (java.util.NoSuchElementException e) {
 			if(isLoggedIn()) {
-				Main.clog("Ein nicht verifizierter Client hat sich wieder ausgeloggt!");
-			}else {
 				Main.clog(" "+name+" hat sich ausgeloggt!");
+			}else {
+				Main.clog("Ein nicht verifizierter Client hat sich wieder ausgeloggt!");
 			}
 			
 		}
