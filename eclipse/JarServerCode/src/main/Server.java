@@ -15,6 +15,25 @@ public class Server {
 
     public static ArrayList<ClientConnection> connections = new ArrayList<>();
     
+    public static ClientConnection getConnectionByName(String name) {
+		for(int i = 0; i<connections.size();i++) {
+			if(connections.get(i).name.equalsIgnoreCase(name))
+				return connections.get(i);
+		}
+		return null;
+	}
+    
+	public static void sendMessageToAll(String text) {
+		for(int i = 0; i<connections.size();i++)
+			connections.get(i).sendMessage(text);
+	}
+	
+	public static void sendMessageToAllOutOne(String text, ClientConnection notSendTo) {
+		for(int i = 0; i<connections.size();i++)
+			if(connections.get(i)!=notSendTo) connections.get(i).sendMessage(text);
+	}
+    
+    
     public static void start() {
     	
 
