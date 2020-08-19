@@ -15,6 +15,9 @@ public class ClientConnection implements Runnable{
 	Scanner in;
 	Thread listener;
 	
+	int hp = 0;
+	int x=0,y=0;
+	
 	
     public ClientConnection(Socket connection){
     	this.connection = connection;
@@ -45,6 +48,12 @@ public class ClientConnection implements Runnable{
     
     public void sendInfoMessage(String text) {
     	out.println(createMesssage(new String[]{"MESSAGE","INFO",text}));
+    	out.flush();
+    }
+    
+    public void returnDataRequestResult(String key, Object value) {
+    	String valueString = String.valueOf(value);
+    	out.println(createMesssage(new String[]{"DATA-RETURN",key,valueString}));
     	out.flush();
     }
     
@@ -83,6 +92,27 @@ public class ClientConnection implements Runnable{
 					
 					
 					
+					
+					if(args[0].equalsIgnoreCase("data")) {
+						
+						if(args[1].equalsIgnoreCase("get")) {
+							
+							
+							if(args[2].equalsIgnoreCase("HP")) {returnDataRequestResult("HP", hp);}
+							
+							if(args[2].equalsIgnoreCase("posX")) {returnDataRequestResult("posX", x);}
+							if(args[2].equalsIgnoreCase("posY")) {returnDataRequestResult("posY", y);}
+							
+						}
+						
+						if(args[1].equalsIgnoreCase("set")) {
+							
+							
+						}
+						
+					}
+					
+					
 				}else {
 					//Login
 					if(args[0].equalsIgnoreCase("login")) {
@@ -92,6 +122,7 @@ public class ClientConnection implements Runnable{
 						case 0:	//Zugriff gewährt
 							name=args[1];
 							sendInfoMessage("Login successfull");
+							Server.infoToAll(name + " joined the Game!");
 							break;
 						case 1:	//Falsches Passwort
 							sendErrorMessage("Wrong password");
@@ -114,6 +145,7 @@ public class ClientConnection implements Runnable{
 		} catch (java.util.NoSuchElementException e) {
 			if(isLoggedIn()) {
 				Server.clog(" "+name+" hat sich ausgeloggt!");
+				Server.infoToAll(name + " left the Game!");
 			}else {
 				Server.clog("Ein nicht verifizierter Client hat sich wieder ausgeloggt!");
 			}
