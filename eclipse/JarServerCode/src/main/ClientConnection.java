@@ -150,6 +150,9 @@ public class ClientConnection implements Runnable{
     //Death handeling
     
     public boolean checkDead() {
+    	if(hp<=0) {
+    		sendInfoMessage("you died!");
+    	}
     	return hp<=0;
     }
     
@@ -176,7 +179,9 @@ public class ClientConnection implements Runnable{
 					//Character Controlls
 					
 					
-					
+					if(args[0].equalsIgnoreCase("attack")) {
+						attack(args[1]);
+					}
 					
 					
 					
