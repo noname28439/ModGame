@@ -19,6 +19,7 @@ public class ClientConnection implements Runnable{
 	
 	int hp = 0;
 	int x=0,y=0;
+	int killstreak = 0;
 	
 	
     public ClientConnection(Socket connection){
@@ -29,10 +30,12 @@ public class ClientConnection implements Runnable{
 			in = new Scanner(connection.getInputStream());
 		} catch (IOException e) {}
     	
-    	
     	listener = new Thread(this);
     	listener.start();
-
+    	
+    	//Set basic Player values
+    	hp = Settings.player_hp;
+    	
     }
     
     
@@ -63,11 +66,19 @@ public class ClientConnection implements Runnable{
     //PlayerControllFunctions
     
     public void attack(String player) {
-    	if(Server.getConnectionByName(player)!=null) {
-    		
+    	ClientConnection result = Server.getConnectionByName(player);
+    	if(result!=null) {
+    		result.hp-=generateDamage();
+    		if(result.checkDead()) {
+    			//Player isDead
+    			killstreak+=1;
+    			result.resetPosition();
+    			result.resetKillstreak();
+    			Server.clog(name+" killed "+result.name);
+    		}
     	}else {
     		//No player with this Name found!
-    		
+    		punish(1);
     	}
     	
     }
@@ -75,6 +86,8 @@ public class ClientConnection implements Runnable{
     public void move(int x, int y) {
     	
     }
+    
+    
     
     
     //delay Handeler
@@ -123,8 +136,26 @@ public class ClientConnection implements Runnable{
     	return !(name == null);
     }
     
+    public float generateDamage() {
+    	return Settings.player_damage;
+    }
     
     
+    
+    //Death handeling
+    
+    public boolean checkDead() {
+    	return hp<=0;
+    }
+    
+    public void resetPosition() {
+    	x=0;
+    	y=0;
+    }
+    
+    public void resetKillstreak() {
+    	killstreak=0;
+    }
     
 	@Override
 	public void run() {
