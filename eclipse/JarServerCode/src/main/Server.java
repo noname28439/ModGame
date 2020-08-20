@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 import settings.Settings;
 
 public class Server {
@@ -55,7 +57,17 @@ public class Server {
 		sendMessageToAll(buildMesssage(new String[] {"MESSAGE","SERVERWIDE-INFO",text}));
 	}
 	
+	public static boolean canPlayerAttack(ClientConnection attacker, ClientConnection target) {
+		return (calculateDistanceBetweenPoints(attacker.x, attacker.y, target.x, target.y)<Settings.player_attack_radius);
+	}
 	
+	static double calculateDistanceBetweenPoints(
+			  double x1, 
+			  double y1, 
+			  double x2, 
+			  double y2) {       
+			    return Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
+			}
     
     public static void start() {
     	

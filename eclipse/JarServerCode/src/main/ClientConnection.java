@@ -68,17 +68,22 @@ public class ClientConnection implements Runnable{
     public void attack(String player) {
     	ClientConnection result = Server.getConnectionByName(player);
     	if(result!=null) {
-    		result.hp-=generateDamage();
-    		if(result.checkDead()) {
-    			//Player isDead
-    			killstreak+=1;
-    			result.resetPosition();
-    			result.resetKillstreak();
-    			Server.clog(name+" killed "+result.name);
+    		if(Server.canPlayerAttack(this, result)) {
+    			result.hp-=generateDamage();
+        		if(result.checkDead()) {
+        			//Player isDead
+        			killstreak+=1;
+        			result.resetPosition();
+        			result.resetKillstreak();
+        			Server.clog(name+" killed "+result.name);
+        		}
+    		}else {
+    			//Player not in Range!
+        		punish(1);
     		}
     	}else {
     		//No player with this Name found!
-    		punish(1);
+    		punish(5);
     	}
     	
     }
