@@ -15,6 +15,8 @@ public class ClientConnection implements Runnable{
 	Scanner in;
 	Thread listener;
 	
+	float delay = 0;
+	
 	int hp = 0;
 	int x=0,y=0;
 	
@@ -58,15 +60,65 @@ public class ClientConnection implements Runnable{
     }
     
     
+    //PlayerControllFunctions
+    
+    public void attack(String player) {
+    	if(Server.getConnectionByName(player)!=null) {
+    		
+    	}else {
+    		//No player with this Name found!
+    		
+    	}
+    	
+    }
+    
+    public void move(int x, int y) {
+    	
+    }
     
     
+    //delay Handeler
+	    
+	    
+	    //basic
+	    
+	    public void delayTick() {
+	    	if(delay>0) {
+	    		delay-=0.1;
+	    	}else {
+	    		delay = 0;
+	    	}
+	    }
+	    
+	    public void delayAdd(float amount) {
+	    		delay+=amount;
+	    }
+	    
+	    public void delayRemove(float amount) {
+	    	if(delay>0)
+	    		delay-=amount;
+	    }
+	    
+	    public float getDelay() {
+	    	return delay;
+	    }
+	    
+	    //advanced
     
+	    
+	    public void punish(float strength) {
+	    	delayAdd(strength);
+	    }
     
+	    public boolean isStunned() {
+	    	return (getDelay()>0);
+	    }
     
+	    
+	    
+	    
     
-    
-    
-    //helping Functions
+    //ground Functions
     public boolean isLoggedIn() {
     	return !(name == null);
     }
@@ -103,6 +155,8 @@ public class ClientConnection implements Runnable{
 							if(args[2].equalsIgnoreCase("posX")) {returnDataRequestResult("posX", x);}
 							if(args[2].equalsIgnoreCase("posY")) {returnDataRequestResult("posY", y);}
 							
+							if(args[2].equalsIgnoreCase("delay")) {returnDataRequestResult("delay", delay);}
+							
 						}
 						
 						if(args[1].equalsIgnoreCase("set")) {
@@ -110,7 +164,21 @@ public class ClientConnection implements Runnable{
 							
 						}
 						
+						if(args[1].equalsIgnoreCase("add")) {
+							if(args[2].equalsIgnoreCase("delay")) delayAdd(Float.valueOf(args[3]));
+							
+						}
+						if(args[1].equalsIgnoreCase("remove")) {
+							
+							
+						}
+						
 					}
+					
+					
+					
+					
+					
 					
 					
 				}else {
@@ -149,7 +217,8 @@ public class ClientConnection implements Runnable{
 			}else {
 				Server.clog("Ein nicht verifizierter Client hat sich wieder ausgeloggt!");
 			}
-			
+			Server.connections.remove(this);
+			Thread.currentThread().stop();
 		}
 	}
 
@@ -171,5 +240,9 @@ public class ClientConnection implements Runnable{
 		return result;
 	}
 	
+	
+	public void iclog(String text) {
+		System.out.println("[ModServer<\""+name+"\">]--> "+text);
+	}
 
 }

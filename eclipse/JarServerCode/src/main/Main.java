@@ -15,8 +15,10 @@ public class Main {
     public static ArrayList<ClientConnection> connections = new ArrayList<>();
     
     public static void main(String[] args) {
+    	DelayThread.start();
     	Server.start();
-
+    	
+    	
     }
     
 	
