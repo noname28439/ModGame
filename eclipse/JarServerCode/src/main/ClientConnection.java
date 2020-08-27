@@ -72,7 +72,7 @@ public class ClientConnection implements Runnable{
     			result.hp-=generateDamage();
         		if(result.checkDead()) {
         			//Player isDead
-        			killstreak+=result.killstreak/2;
+        			killstreak+=Integer.valueOf(result.killstreak/10);
         			result.resetPosition();
         			result.resetKillstreak();
         			Server.clog(name+" killed "+result.name);
