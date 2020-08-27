@@ -19,7 +19,9 @@ public class ClientConnection implements Runnable{
 	
 	int hp = 0;
 	int x=0,y=0;
-	int killstreak = 0;
+	int points = 0;
+	
+	int currentTileKey = 0;
 	
 	
     public ClientConnection(Socket connection){
@@ -72,7 +74,7 @@ public class ClientConnection implements Runnable{
     			result.hp-=generateDamage();
         		if(result.checkDead()) {
         			//Player isDead
-        			killstreak+=Integer.valueOf(result.killstreak/10);
+        			points+=Integer.valueOf(result.points/10);
         			result.resetPosition();
         			result.resetKillstreak();
         			Server.clog(name+" killed "+result.name);
@@ -88,8 +90,44 @@ public class ClientConnection implements Runnable{
     	
     }
     
-    public void move(int x, int y) {
+    public void move(float mvx, float mvy) {
     	
+    	double distance = Server.calculateDistanceBetweenPoints(x, y, mvx, mvy);
+    	
+    	int tox = (int)(x+mvx);
+    	int toy = (int)(y+mvy);
+    	
+    	if(!(distance>Settings.player_move_radius)) {
+    		Tile jumpTo = World.tiles[tox][toy];
+    		switch (jumpTo.getID()) {
+			case 0:	//Normal
+				x=tox;
+				y=toy;
+				punish(0.1f);
+				break;
+			case 1:	//Highway
+				x=tox;
+				y=toy;
+				break;
+			case 2:	//Wall
+				if(currentTileKey == jumpTo.getKey()) {
+					x=tox;
+					y=toy;
+				}
+				break;
+			case 3:	//Trap
+				x=tox;
+				y=toy;
+				//---------------------------------------------------------------------------------ExecuteTrapAttack------------------------------------------------------------------------------
+			break;
+
+			default:
+				break;
+			}
+    		
+    		
+    	}else
+    		punish(0.5f);
     }
     
     
@@ -162,7 +200,7 @@ public class ClientConnection implements Runnable{
     }
     
     public void resetKillstreak() {
-    	killstreak=0;
+    	points=0;
     }
     
 	@Override
@@ -198,10 +236,17 @@ public class ClientConnection implements Runnable{
 							
 							if(args[2].equalsIgnoreCase("delay")) {returnDataRequestResult("delay", delay);}
 							
+							if(args[2].equalsIgnoreCase("currentTileKey")) {returnDataRequestResult("currentTileKey", currentTileKey);}
+							
 						}
 						
 						if(args[1].equalsIgnoreCase("set")) {
-							
+							if(args[2].equalsIgnoreCase("currentTileKey")) {
+								int rcvValue = Integer.valueOf(args[3]);
+								if(rcvValue>=0) {
+									currentTileKey=rcvValue;
+								}
+							}
 							
 						}
 						

@@ -10,6 +10,7 @@ public class Settings {
     public static int player_hp = 100;
     public static int player_damage = 1;
     public static int player_attack_radius = 10;
+    public static int player_move_radius = 10;
     
     public static String connection_message_seperator = ":";
     
