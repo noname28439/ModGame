@@ -162,8 +162,8 @@ public class ClientConnection implements Runnable{
 	    //advanced
     
 	    
-	    public void punish(float strength) {
-	    	delayAdd(strength);
+	    public void punish(float seconds) {
+	    	delayAdd(seconds);
 	    }
     
 	    public boolean isStunned() {
@@ -183,6 +183,22 @@ public class ClientConnection implements Runnable{
     	return Settings.player_damage;
     }
     
+    
+    //InfluenceTileOptions
+    
+    public void createWallAtCurrentPos() {
+    	createWallAtSpecificPos(this.x, this.y);
+    }
+    
+    public void createWallAtSpecificPos(int x, int y) {
+    	if(!(Server.calculateDistanceBetweenPoints(this.x, this.y, x, y)>Settings.player_interact_tile_radius)) {
+    		World.tiles[x][y].setID(Tile.HIGHWAY);
+    		World.tiles[x][y].setKey(currentTileKey);
+    		punish(10);
+    	}else
+    		punish(2);
+    	
+    }
     
     
     //Death handeling

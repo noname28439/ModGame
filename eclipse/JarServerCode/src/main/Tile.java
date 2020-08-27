@@ -2,11 +2,11 @@ package main;
 
 public class Tile {
 
-	Tile 
-	NORMAL = new Tile(0),
-	HIGHWAY = new Tile(1),
-	WALL = new Tile(2),
-	TRAP = new Tile(3)
+	public static int 
+	NORMAL = 0,
+	HIGHWAY = 1,
+	WALL = 2,
+	TRAP = 3
 	;
 	
 	

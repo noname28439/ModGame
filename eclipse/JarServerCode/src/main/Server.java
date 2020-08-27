@@ -73,7 +73,9 @@ public class Server {
     	
 
         clog("Server Loading...");
-
+        
+        World.load();
+        
         DataBaseHandeler.load();
         clog("SQL DataBaseHandeler successfully loaded...");
         
