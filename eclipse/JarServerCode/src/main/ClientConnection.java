@@ -73,6 +73,7 @@ public class ClientConnection implements Runnable{
         		if(result.checkDead()) {
         			//Player isDead
         			killstreak+=1;
+        			killstreak+=Integer.valueOf(result.killstreak/10);
         			result.resetPosition();
         			result.resetKillstreak();
         			Server.clog(name+" killed "+result.name);
@@ -152,6 +153,7 @@ public class ClientConnection implements Runnable{
     public boolean checkDead() {
     	if(hp<=0) {
     		sendInfoMessage("you died!");
+    		Server.infoToAll(name+" died");
     	}
     	return hp<=0;
     }
