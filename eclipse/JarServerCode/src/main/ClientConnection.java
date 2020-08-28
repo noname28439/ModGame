@@ -83,7 +83,7 @@ public class ClientConnection implements Runnable{
     	if(result!=null) {
     		if(Server.canPlayerAttack(this, result)) {
     			result.hp-=generateDamage();
-    			sendFeedbackMessage("attack", true);
+    			sendFeedbackMessage("attack["+player+"]", true);
         		if(result.checkDead()) {
         			sendFeedbackMessage("kill", true);
         			//Player isDead
@@ -104,10 +104,11 @@ public class ClientConnection implements Runnable{
     }
     
     
-    void for_move_set_x_and_y(int x, int y) {
-    	sendFeedbackMessage("move", true);
-    	this.x=x;
-		this.y=y;
+    void for_move_set_x_and_y(int mvx, int mvy) {
+    	/*sendFeedbackMessage("move["+x+"|"+y+"]", true);*/
+    	x=mvx;
+		y=mvy;
+		sendFeedbackMessage("move", true);
     }
     
     
@@ -120,22 +121,30 @@ public class ClientConnection implements Runnable{
     	
     	if(!(distance>Settings.player_move_radius)) {
     		Tile jumpTo = World.tiles[tox][toy];
+    		if(jumpTo==null) {
+    			sendFeedbackMessage("move(border)", false);
+    			punish(3);
+    			
+    		}else
     		switch (jumpTo.getID()) {
 			case 0:	//Normal
-				for_move_set_x_and_y(x,y);
+				for_move_set_x_and_y(tox,toy);
 				punish(0.1f);
 				break;
 			case 1:	//Highway
-				for_move_set_x_and_y(x,y);
+				for_move_set_x_and_y(tox,toy);
 				break;
 			case 2:	//Wall
 				if(currentTileKey == jumpTo.getKey()) {
-					for_move_set_x_and_y(x,y);
+					for_move_set_x_and_y(tox,toy);
 					punish(0.1f);
+				}else {
+					sendFeedbackMessage("move", false);
+					punish(0.2f);
 				}
 				break;
 			case 3:	//Trap
-				for_move_set_x_and_y(x,y);
+				for_move_set_x_and_y(tox,toy);
 				//---------------------------------------------------------------------------------ExecuteTrapAttack------------------------------------------------------------------------------
 			break;
 
@@ -145,6 +154,7 @@ public class ClientConnection implements Runnable{
     		
     		
     	}else
+    		sendFeedbackMessage("move(distance)", false);
     		punish(0.5f);
     }
     
@@ -213,7 +223,7 @@ public class ClientConnection implements Runnable{
     		World.tiles[x][y].setID(Tile.HIGHWAY);
     		World.tiles[x][y].setKey(currentTileKey);
     		World.tiles[x][y].setOwner(name);
-    		sendFeedbackMessage("wallCreation", true);
+    		sendFeedbackMessage("wallCreation["+x+"|"+y+"]", true);
     		punish(10);
     	}else
     		punish(2);

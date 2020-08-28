@@ -8,7 +8,7 @@ public class Settings {
     
     public static int player_delay_regeneration_delay = 100;
     public static int player_hp = 100;
-    public static int player_damage = 1;
+    public static int player_damage = 5;
     public static int player_attack_radius = 10;
     public static int player_move_radius = 10;
     public static int player_interact_tile_radius = 3;
