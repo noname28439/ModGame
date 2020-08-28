@@ -22,6 +22,12 @@ public class Server {
     //Basic helpingFunctions
     
     
+    public static void chatSend(String text) {
+    	sendMessageToAll(buildMesssage(new String[] {"MESSAGE","CHAT",text}));
+    }
+    
+    
+    
     public static ClientConnection getConnectionByName(String name) {
 		for(int i = 0; i<connections.size();i++) {
 			if(connections.get(i).name.equalsIgnoreCase(name))

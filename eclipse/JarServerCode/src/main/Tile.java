@@ -11,6 +11,7 @@ public class Tile {
 	
 	
 	
+	private String owner;
 	
 	private int id;
 	private int key;
@@ -18,6 +19,7 @@ public class Tile {
 	Tile(int id) {
 		this.id = id;
 		this.key = -1;
+		owner = null;
 	}
 	
 	public void setID(int id) {
@@ -31,6 +33,12 @@ public class Tile {
 	}
 	public void setKey(int key) {
 		this.key = key;
+	}
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 	
 	

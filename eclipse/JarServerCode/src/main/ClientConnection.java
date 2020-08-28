@@ -42,7 +42,7 @@ public class ClientConnection implements Runnable{
     
     
     //Basic Connection Functions
-    public void sendMessage(String text) {
+    void sendMessage(String text) {
     	out.println(text);
     	out.flush();
     }
@@ -55,6 +55,11 @@ public class ClientConnection implements Runnable{
     
     public void sendInfoMessage(String text) {
     	out.println(createMesssage(new String[]{"MESSAGE","INFO",text}));
+    	out.flush();
+    }
+    
+    public void sendFeedbackMessage(String actionName, String success) {
+    	out.println(createMesssage(new String[]{"MESSAGE","FEEDBACK",actionName,success}));
     	out.flush();
     }
     
@@ -194,6 +199,7 @@ public class ClientConnection implements Runnable{
     	if(!(Server.calculateDistanceBetweenPoints(this.x, this.y, x, y)>Settings.player_interact_tile_radius)) {
     		World.tiles[x][y].setID(Tile.HIGHWAY);
     		World.tiles[x][y].setKey(currentTileKey);
+    		World.tiles[x][y].setOwner(name);
     		punish(10);
     	}else
     		punish(2);
@@ -237,6 +243,21 @@ public class ClientConnection implements Runnable{
 						attack(args[1]);
 					}
 					
+					if(args[0].equalsIgnoreCase("move")) {
+						move(Float.valueOf(args[1]), Float.valueOf(args[2]));
+					}
+					
+					if(args[0].equalsIgnoreCase("tileInteraction")) {
+						if(args[1].equalsIgnoreCase("wallhere")) {
+							createWallAtCurrentPos();
+						}
+						
+					}
+					
+					
+					if(args[0].equalsIgnoreCase("chat")) {
+						Server.chatSend(args[1]);
+					}
 					
 					
 					
