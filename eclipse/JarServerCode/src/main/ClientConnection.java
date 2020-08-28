@@ -9,19 +9,25 @@ import settings.Settings;
 
 public class ClientConnection implements Runnable{
 
+	//Connection
 	Socket connection;
 	String name;
 	PrintStream out;
 	Scanner in;
 	Thread listener;
 	
+	//
 	float delay = 0;
 	
+	//Basic Values
 	int hp = 0;
 	int x=0,y=0;
 	int points = 0;
 	
+	//Ingame Functions
 	int currentTileKey = 0;
+	boolean sneaking = false;
+	
 	
 	
     public ClientConnection(Socket connection){
@@ -58,8 +64,8 @@ public class ClientConnection implements Runnable{
     	out.flush();
     }
     
-    public void sendFeedbackMessage(String actionName, String success) {
-    	out.println(createMesssage(new String[]{"MESSAGE","FEEDBACK",actionName,success}));
+    public void sendFeedbackMessage(String actionName, boolean success) {
+    	out.println(createMesssage(new String[]{"MESSAGE","FEEDBACK",actionName,String.valueOf(success)}));
     	out.flush();
     }
     
@@ -77,7 +83,9 @@ public class ClientConnection implements Runnable{
     	if(result!=null) {
     		if(Server.canPlayerAttack(this, result)) {
     			result.hp-=generateDamage();
+    			sendFeedbackMessage("attack", true);
         		if(result.checkDead()) {
+        			sendFeedbackMessage("kill", true);
         			//Player isDead
         			points+=Integer.valueOf(result.points/10);
         			result.resetPosition();
@@ -95,6 +103,14 @@ public class ClientConnection implements Runnable{
     	
     }
     
+    
+    void for_move_set_x_and_y(int x, int y) {
+    	sendFeedbackMessage("move", true);
+    	this.x=x;
+		this.y=y;
+    }
+    
+    
     public void move(float mvx, float mvy) {
     	
     	double distance = Server.calculateDistanceBetweenPoints(x, y, mvx, mvy);
@@ -106,23 +122,20 @@ public class ClientConnection implements Runnable{
     		Tile jumpTo = World.tiles[tox][toy];
     		switch (jumpTo.getID()) {
 			case 0:	//Normal
-				x=tox;
-				y=toy;
+				for_move_set_x_and_y(x,y);
 				punish(0.1f);
 				break;
 			case 1:	//Highway
-				x=tox;
-				y=toy;
+				for_move_set_x_and_y(x,y);
 				break;
 			case 2:	//Wall
 				if(currentTileKey == jumpTo.getKey()) {
-					x=tox;
-					y=toy;
+					for_move_set_x_and_y(x,y);
+					punish(0.1f);
 				}
 				break;
 			case 3:	//Trap
-				x=tox;
-				y=toy;
+				for_move_set_x_and_y(x,y);
 				//---------------------------------------------------------------------------------ExecuteTrapAttack------------------------------------------------------------------------------
 			break;
 
@@ -200,6 +213,7 @@ public class ClientConnection implements Runnable{
     		World.tiles[x][y].setID(Tile.HIGHWAY);
     		World.tiles[x][y].setKey(currentTileKey);
     		World.tiles[x][y].setOwner(name);
+    		sendFeedbackMessage("wallCreation", true);
     		punish(10);
     	}else
     		punish(2);
@@ -235,7 +249,7 @@ public class ClientConnection implements Runnable{
 				
 				
 				
-				if(isLoggedIn()) {
+				if(isLoggedIn()&&!isStunned()) {
 					//Character Controlls
 					
 					
