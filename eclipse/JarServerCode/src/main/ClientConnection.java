@@ -90,14 +90,17 @@ public class ClientConnection implements Runnable{
         			points+=Integer.valueOf(result.points/10);
         			result.resetPosition();
         			result.resetKillstreak();
+        			result.resetHP();
         			Server.clog(name+" killed "+result.name);
         		}
     		}else {
     			//Player not in Range!
+    			sendFeedbackMessage("attack(range)", false);
         		punish(1);
     		}
     	}else {
     		//No player with this Name found!
+    		sendFeedbackMessage("attack(name)", false);
     		punish(5);
     	}
     	
@@ -153,9 +156,11 @@ public class ClientConnection implements Runnable{
 			}
     		
     		
-    	}else
+    	}else {
     		sendFeedbackMessage("move(distance)", false);
     		punish(0.5f);
+    	}
+    		
     }
     
     
@@ -247,6 +252,10 @@ public class ClientConnection implements Runnable{
     
     public void resetKillstreak() {
     	points=0;
+    }
+    
+    public void resetHP() {
+    	hp=Settings.player_hp;
     }
     
 	@Override
