@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Set;
 
 import settings.Settings;
 
@@ -93,15 +94,16 @@ public class ClientConnection implements Runnable{
         			result.resetHP();
         			Server.clog(name+" killed "+result.name);
         		}
+        		punish(Settings.delay_playerAttack);
     		}else {
     			//Player not in Range!
     			sendFeedbackMessage("attack(range)", false);
-        		punish(1);
+        		punish(Settings.delay_playerAttack__OUT_OF_RANGE);
     		}
     	}else {
     		//No player with this Name found!
     		sendFeedbackMessage("attack(name)", false);
-    		punish(5);
+    		punish(Settings.delay_playerAttack__NAME_NOT_FOUND);
     	}
     	
     }
@@ -126,13 +128,13 @@ public class ClientConnection implements Runnable{
     		Tile jumpTo = World.tiles[tox][toy];
     		if(jumpTo==null) {
     			sendFeedbackMessage("move(border)", false);
-    			punish(3);
+    			punish(Settings.delay_playerMovement__OUT_OF_MAP);
     			
     		}else
     		switch (jumpTo.getID()) {
 			case 0:	//Normal
 				for_move_set_x_and_y(tox,toy);
-				punish(0.1f);
+				punish(Settings.delay_playerMovement_normal);
 				break;
 			case 1:	//Highway
 				for_move_set_x_and_y(tox,toy);
@@ -140,10 +142,10 @@ public class ClientConnection implements Runnable{
 			case 2:	//Wall
 				if(currentTileKey == jumpTo.getKey()) {
 					for_move_set_x_and_y(tox,toy);
-					punish(0.1f);
+					punish(Settings.delay_playerMovement_wall);
 				}else {
 					sendFeedbackMessage("move", false);
-					punish(0.2f);
+					punish(Settings.delay_playerMovement_wall__WALL_KEY);
 				}
 				break;
 			case 3:	//Trap
@@ -158,7 +160,7 @@ public class ClientConnection implements Runnable{
     		
     	}else {
     		sendFeedbackMessage("move(distance)", false);
-    		punish(0.5f);
+    		punish(Settings.delay_playerMovement__RANGE);
     	}
     		
     }
@@ -229,9 +231,9 @@ public class ClientConnection implements Runnable{
     		World.tiles[x][y].setKey(currentTileKey);
     		World.tiles[x][y].setOwner(name);
     		sendFeedbackMessage("wallCreation["+x+"|"+y+"]", true);
-    		punish(10);
+    		punish(Settings.delay_mapInteraction_createWall);
     	}else
-    		punish(2);
+    		punish(Settings.delay_mapInteraction_createWall__OUT_OF_RANGE);
     	
     }
     
@@ -262,6 +264,9 @@ public class ClientConnection implements Runnable{
 	public void run() {
 		try {
 		while(true) {
+			try {
+				
+			
 				String recv = in.nextLine();
 				System.err.println("[FROM_CLIENT] --> "+recv);
 				String[] args = recv.split(Settings.connection_message_seperator);
@@ -290,7 +295,7 @@ public class ClientConnection implements Runnable{
 					
 					if(args[0].equalsIgnoreCase("chat")) {
 						Server.chatSend(args[1]);
-						punish(0.1f);
+						punish(Settings.delay_chat_send);
 					}
 					
 					if(args[0].equalsIgnoreCase("map")) {
@@ -299,14 +304,14 @@ public class ClientConnection implements Runnable{
 							int y = Integer.valueOf(args[3]);
 							
 							sendMessage("map:tileID:"+x+":"+y+":"+World.tiles[x][y].getID());
-							punish(1);
+							punish(Settings.delay_maprequest_tileID);
 						}
 						if(args[1].equalsIgnoreCase("isNormal")) {
 							int x = Integer.valueOf(args[2]);
 							int y = Integer.valueOf(args[3]);
 							
 							sendMessage("map:isNormal:"+x+":"+y+":"+(World.tiles[x][y].getID()==0));
-							punish(0.1f);
+							punish(Settings.delay_maprequest_isNormal);
 						}
 					}
 					
@@ -381,7 +386,9 @@ public class ClientConnection implements Runnable{
 				}
 				
 				
-			
+			} catch (ArrayIndexOutOfBoundsException e) {
+				punish(Settings.delay_recieve_arrayOutOfBound);
+			}
 			
 		}
 		} catch (java.util.NoSuchElementException e) {
