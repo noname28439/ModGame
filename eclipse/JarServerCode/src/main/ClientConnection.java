@@ -290,8 +290,25 @@ public class ClientConnection implements Runnable{
 					
 					if(args[0].equalsIgnoreCase("chat")) {
 						Server.chatSend(args[1]);
+						punish(0.1f);
 					}
 					
+					if(args[0].equalsIgnoreCase("map")) {
+						if(args[1].equalsIgnoreCase("tileID")) {
+							int x = Integer.valueOf(args[2]);
+							int y = Integer.valueOf(args[3]);
+							
+							sendMessage("map:tileID:"+x+":"+y+":"+World.tiles[x][y].getID());
+							punish(1);
+						}
+						if(args[1].equalsIgnoreCase("isNormal")) {
+							int x = Integer.valueOf(args[2]);
+							int y = Integer.valueOf(args[3]);
+							
+							sendMessage("map:isNormal:"+x+":"+y+":"+(World.tiles[x][y].getID()==0));
+							punish(0.1f);
+						}
+					}
 					
 					
 					if(args[0].equalsIgnoreCase("data")) {
@@ -307,6 +324,7 @@ public class ClientConnection implements Runnable{
 							if(args[2].equalsIgnoreCase("delay")) {returnDataRequestResult("delay", delay);}
 							
 							if(args[2].equalsIgnoreCase("currentTileKey")) {returnDataRequestResult("currentTileKey", currentTileKey);}
+							
 							
 						}
 						
