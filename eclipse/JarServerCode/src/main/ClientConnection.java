@@ -84,7 +84,7 @@ public class ClientConnection implements Runnable{
     	ClientConnection result = Server.getConnectionByName(player);
     	if(result!=null) {
     		if(Server.canPlayerAttack(this, result)) {
-    			result.hp-=generateDamage();
+    			result.hp-=calculateDamage();
     			sendFeedbackMessage("attack["+player+"]", true);
         		if(result.checkDead()) {
         			sendFeedbackMessage("kill", true);
@@ -215,7 +215,7 @@ public class ClientConnection implements Runnable{
     	return !(name == null);
     }
     
-    public float generateDamage() {
+    public float calculateDamage() {
     	return Settings.player_damage;
     }
     
@@ -223,18 +223,26 @@ public class ClientConnection implements Runnable{
     //InfluenceTileOptions
     
     public void createWallAtCurrentPos() {
-    	createWallAtSpecificPos(this.x, this.y);
+    	createSpecialTileAtSpecificPos(this.x, this.y, Tile.WALL);
+    	punish(Settings.delay_mapInteraction_createWall);
+    }
+    public void createHighwayAtCurrentPos() {
+    	createSpecialTileAtSpecificPos(this.x, this.y, Tile.HIGHWAY);
+    	punish(Settings.delay_mapInteraction_createHighway);
+    }
+    public void createTrapAtCurrentPos() {
+    	createSpecialTileAtSpecificPos(this.x, this.y, Tile.TRAP);
+    	punish(Settings.delay_mapInteraction_createTrap);
     }
     
-    public void createWallAtSpecificPos(int x, int y) {
+    public void createSpecialTileAtSpecificPos(int x, int y, int tileID) {
     	if(!(Server.calculateDistanceBetweenPoints(this.x, this.y, x, y)>Settings.player_interact_tile_radius)) {
-    		World.getTile(x, y).setID(Tile.HIGHWAY);
+    		World.getTile(x, y).setID(tileID);
     		World.getTile(x, y).setKey(currentTileKey);
     		World.getTile(x, y).setOwner(name);
     		sendFeedbackMessage("wallCreation["+x+"|"+y+"]", true);
-    		punish(Settings.delay_mapInteraction_createWall);
     	}else
-    		punish(Settings.delay_mapInteraction_createWall__OUT_OF_RANGE);
+    		punish(Settings.delay_mapInteraction_resetTileID__OUT_OF_RANGE);
     	
     }
     
@@ -288,8 +296,14 @@ public class ClientConnection implements Runnable{
 					}
 					
 					if(args[0].equalsIgnoreCase("tileInteraction")) {
-						if(args[1].equalsIgnoreCase("wallhere")) {
+						if(args[1].equalsIgnoreCase("wall")) {
 							createWallAtCurrentPos();
+						}
+						if(args[1].equalsIgnoreCase("highway")) {
+							createHighwayAtCurrentPos();
+						}
+						if(args[1].equalsIgnoreCase("trap")) {
+							createTrapAtCurrentPos();
 						}
 						
 					}
@@ -331,6 +345,8 @@ public class ClientConnection implements Runnable{
 							if(args[2].equalsIgnoreCase("delay")) {returnDataRequestResult("delay", delay);}
 							
 							if(args[2].equalsIgnoreCase("currentTileKey")) {returnDataRequestResult("currentTileKey", currentTileKey);}
+							
+							if(args[2].equalsIgnoreCase("currentDamage")) {returnDataRequestResult("currentDamage", calculateDamage());}
 							
 							
 						}
