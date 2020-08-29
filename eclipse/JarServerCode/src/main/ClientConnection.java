@@ -34,6 +34,7 @@ public class ClientConnection implements Runnable{
     public ClientConnection(Socket connection){
     	this.connection = connection;
     	
+    	
     	try {
 			out = new PrintStream(connection.getOutputStream());
 			in = new Scanner(connection.getInputStream());
@@ -268,7 +269,8 @@ public class ClientConnection implements Runnable{
 				
 			
 				String recv = in.nextLine();
-				System.err.println("[FROM_CLIENT] --> "+recv);
+				//System.err.println("[FROM_CLIENT] --> "+recv);
+				iclog(recv);
 				String[] args = recv.split(Settings.connection_message_seperator);
 				
 				
@@ -423,7 +425,7 @@ public class ClientConnection implements Runnable{
 	
 	
 	public void iclog(String text) {
-		System.out.println("[ModServer<\""+name+"\">]--> "+text);
+		System.out.println("[ModServer<\""+name+"\"|\""+connection.getInetAddress()+"\">]--> "+text);
 	}
 
 }

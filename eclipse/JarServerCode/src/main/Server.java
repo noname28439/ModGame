@@ -98,8 +98,18 @@ public class Server {
         while(true) {
         	try {
 				Socket currentConnection = server.accept();
-				connections.add(new ClientConnection(currentConnection));
-				clog("Client Connected");
+				int regIps = 0;
+				for(int i = 0; i<connections.size();i++) {
+					if(connections.get(i).connection.getInetAddress().toString().equalsIgnoreCase(currentConnection.getInetAddress().toString()))
+						regIps++;
+				}
+				if(regIps>=Settings.ClientConnectionLimit) {
+					currentConnection.close();
+					clog("Client Connection to "+currentConnection.getInetAddress().toString()+" refused, because it already had connected "+Settings.ClientConnectionLimit+" connections!");
+				}else {
+					connections.add(new ClientConnection(currentConnection));
+					clog("Client Connected ["+currentConnection.getInetAddress()+"]");
+				}
 			} catch (IOException e) {}
         }
 
