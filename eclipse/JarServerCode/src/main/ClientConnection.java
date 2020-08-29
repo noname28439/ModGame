@@ -120,13 +120,13 @@ public class ClientConnection implements Runnable{
     
     public void move(float mvx, float mvy) {
     	
-    	double distance = Server.calculateDistanceBetweenPoints(x, y, mvx, mvy);
+    	double distance = Server.calculateDistanceBetweenPoints(0, 0, mvx, mvy);		//<-----------------------------------------Error here? (Try Fixed but not tested)
     	
     	int tox = (int)(x+mvx);
     	int toy = (int)(y+mvy);
     	
     	if(!(distance>Settings.player_move_radius)) {
-    		Tile jumpTo = World.tiles[tox][toy];
+    		Tile jumpTo = World.getTile(tox, toy);
     		if(jumpTo==null) {
     			sendFeedbackMessage("move(border)", false);
     			punish(Settings.delay_playerMovement__OUT_OF_MAP);
@@ -228,9 +228,9 @@ public class ClientConnection implements Runnable{
     
     public void createWallAtSpecificPos(int x, int y) {
     	if(!(Server.calculateDistanceBetweenPoints(this.x, this.y, x, y)>Settings.player_interact_tile_radius)) {
-    		World.tiles[x][y].setID(Tile.HIGHWAY);
-    		World.tiles[x][y].setKey(currentTileKey);
-    		World.tiles[x][y].setOwner(name);
+    		World.getTile(x, y).setID(Tile.HIGHWAY);
+    		World.getTile(x, y).setKey(currentTileKey);
+    		World.getTile(x, y).setOwner(name);
     		sendFeedbackMessage("wallCreation["+x+"|"+y+"]", true);
     		punish(Settings.delay_mapInteraction_createWall);
     	}else
@@ -305,14 +305,14 @@ public class ClientConnection implements Runnable{
 							int x = Integer.valueOf(args[2]);
 							int y = Integer.valueOf(args[3]);
 							
-							sendMessage("map:tileID:"+x+":"+y+":"+World.tiles[x][y].getID());
+							sendMessage("map:tileID:"+x+":"+y+":"+World.getTile(x, y).getID());
 							punish(Settings.delay_maprequest_tileID);
 						}
 						if(args[1].equalsIgnoreCase("isNormal")) {
 							int x = Integer.valueOf(args[2]);
 							int y = Integer.valueOf(args[3]);
 							
-							sendMessage("map:isNormal:"+x+":"+y+":"+(World.tiles[x][y].getID()==0));
+							sendMessage("map:isNormal:"+x+":"+y+":"+(World.getTile(x, y).getID()==0));
 							punish(Settings.delay_maprequest_isNormal);
 						}
 					}
