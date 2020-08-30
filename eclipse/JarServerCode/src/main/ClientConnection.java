@@ -49,8 +49,6 @@ public class ClientConnection implements Runnable{
     	
     	x=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
     	y=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
-    
-    	Server.sendMessageToAll("join:"+name);
     	
     }
     
@@ -433,6 +431,7 @@ public class ClientConnection implements Runnable{
 								name=args[1];
 								sendInfoMessage("Login successfull");
 								Server.infoToAll(name + " joined the Game!");
+								Server.sendMessageToAll("join:"+name);
 								break;
 							case 1:	//Falsches Passwort
 								sendErrorMessage("Wrong password");
