@@ -35,7 +35,8 @@ public class Settings {
     delay_playerMovement__OUT_OF_MAP = 3,
     delay_playerAttack__NAME_NOT_FOUND = 5,
     delay_playerAttack__OUT_OF_RANGE = 1,
-    delay_playerAttack = 0.1f
+    delay_playerAttack = 0.1f,
+    delay_tile_request_outOfMap = 0.1f
     ;
     	
 }

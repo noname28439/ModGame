@@ -347,8 +347,13 @@ public class ClientConnection implements Runnable{
 							int x = Integer.valueOf(args[2]);
 							int y = Integer.valueOf(args[3]);
 							
-							sendMessage("map:tileID:"+x+":"+y+":"+World.getTile(x, y).getID());
-							punish(Settings.delay_maprequest_tileID);
+							if(World.getTile(x, y)!=null) {
+								sendMessage("map:tileID:"+x+":"+y+":"+World.getTile(x, y).getID());
+								punish(Settings.delay_maprequest_tileID);
+							}else {
+								punish(Settings.delay_tile_request_outOfMap);
+							}
+							
 						}
 						if(args[1].equalsIgnoreCase("isNormal")) {
 							int x = Integer.valueOf(args[2]);
