@@ -259,8 +259,8 @@ public class ClientConnection implements Runnable{
     }
     
     public void resetPosition() {
-    	x=0;
-    	y=0;
+    	x=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
+    	y=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
     }
     
     public void resetKillstreak() {
