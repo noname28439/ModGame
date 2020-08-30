@@ -3,6 +3,7 @@ package main;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -45,6 +46,9 @@ public class ClientConnection implements Runnable{
     	
     	//Set basic Player values
     	hp = Settings.player_hp;
+    	
+    	x=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
+    	y=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
     	
     }
     

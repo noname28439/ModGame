@@ -1,8 +1,10 @@
 package main;
 
+import settings.Settings;
+
 public class World {
 
-	private static Tile[][] tiles = new Tile[100][100];
+	private static Tile[][] tiles = new Tile[Settings.mapsize][Settings.mapsize];
 	
 	public static void load() {
 		Server.clog("loading World...");

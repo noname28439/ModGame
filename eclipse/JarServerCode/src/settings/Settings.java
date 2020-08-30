@@ -8,6 +8,7 @@ public class Settings {
     public static String userDB_file_Path = "D:\\Programmieren\\1_ModGame\\WebPage\\userDB.db";
     public static String connection_message_seperator = ":";
     public static int ClientConnectionLimit = 3;
+    public static int mapsize = 1000;
     
     //PlayerSettings
     public static int player_delay_regeneration_delay = 100;
