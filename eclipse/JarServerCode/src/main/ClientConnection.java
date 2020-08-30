@@ -414,25 +414,27 @@ public class ClientConnection implements Runnable{
 				}else {
 					//Login
 					if(args[0].equalsIgnoreCase("login")) {
-						int result = DataBaseHandeler.checkPlayerAccess(args[1], args[2]);
-						
-						switch (result) {
-						case 0:	//Zugriff gewährt
-							name=args[1];
-							sendInfoMessage("Login successfull");
-							Server.infoToAll(name + " joined the Game!");
-							break;
-						case 1:	//Falsches Passwort
-							sendErrorMessage("Wrong password");
-							break;
-						case 2:	//Falscher Nutzername
-							sendErrorMessage("Wrong username");
-							break;
+						if(Server.getConnectionByName(args[1])==null) {
+							int result = DataBaseHandeler.checkPlayerAccess(args[1], args[2]);
+							
+							switch (result) {
+							case 0:	//Zugriff gewährt
+								name=args[1];
+								sendInfoMessage("Login successfull");
+								Server.infoToAll(name + " joined the Game!");
+								break;
+							case 1:	//Falsches Passwort
+								sendErrorMessage("Wrong password");
+								break;
+							case 2:	//Falscher Nutzername
+								sendErrorMessage("Wrong username");
+								break;
 
-						default:
-							break;
-						}
-						
+							default:
+								break;
+							}
+						}else
+							sendErrorMessage("Account \""+args[1]+"\" already connected!");
 					}
 				}
 				
