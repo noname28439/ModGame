@@ -157,8 +157,6 @@ public class ClientConnection implements Runnable{
 			default:
 				break;
 			}
-    		
-    		
     	}else {
     		sendFeedbackMessage("move(distance)", false);
     		punish(Settings.delay_playerMovement__RANGE);
@@ -287,6 +285,36 @@ public class ClientConnection implements Runnable{
 					//Character Controlls
 					
 					
+					if(args[0].equalsIgnoreCase("player")) {
+						String name = args[1];
+						ClientConnection found = Server.findPlayerByName(this,name);
+						
+						if(found!=null) {
+							if(args[2].equalsIgnoreCase("x")) {
+								returnDataRequestResult("player_"+name+"_x", found.x);
+							}
+							if(args[2].equalsIgnoreCase("y")) {
+								returnDataRequestResult("player_"+name+"_y", found.y);
+							}
+						}else {
+							sendFeedbackMessage("palyerpos", false);
+						}
+						
+					}
+					
+					if(args[0].equalsIgnoreCase("playerlist")) {
+						String playerlist = "";
+						
+						for(int i = 0; i<Server.connections.size();i++) {
+							playerlist+=("_"+Server.connections.get(i).name);
+						}
+						playerlist = playerlist.replaceFirst("_", "");
+						
+						returnDataRequestResult("playerlist", playerlist);
+						
+						
+					}
+					
 					if(args[0].equalsIgnoreCase("attack")) {
 						attack(args[1]);
 					}
@@ -348,6 +376,8 @@ public class ClientConnection implements Runnable{
 							
 							if(args[2].equalsIgnoreCase("currentDamage")) {returnDataRequestResult("currentDamage", calculateDamage());}
 							
+							if(args[2].equalsIgnoreCase("sneaking")) {returnDataRequestResult("sneaking", sneaking);}
+							
 							
 						}
 						
@@ -357,6 +387,9 @@ public class ClientConnection implements Runnable{
 								if(rcvValue>=0) {
 									currentTileKey=rcvValue;
 								}
+							}
+							if(args[2].equalsIgnoreCase("sneaking")) {
+								sneaking = Boolean.valueOf(args[3]);
 							}
 							
 						}

@@ -36,6 +36,27 @@ public class Server {
 		return null;
 	}
     
+    public static ClientConnection findPlayerByName(ClientConnection caller, String name) {
+    	ClientConnection found = null;
+		for(int i = 0; i<connections.size();i++) {
+			if(connections.get(i).name.equalsIgnoreCase(name))
+				found = connections.get(i);
+		}
+		if(found!=null) {
+			//Spieler gefunden
+			if(found.sneaking) {
+				if(calculateDistanceBetweenPoints(caller.x, caller.y, found.x, found.y)<Settings.player_sneaking_detectRange) {
+					//Kann spieler sehen
+					return found;
+				}
+			}else {
+				return found;
+			}
+			
+		}
+		return null;
+	}
+    
 	public static void sendMessageToAll(String text) {
 		for(int i = 0; i<connections.size();i++)
 			connections.get(i).sendMessage(text);
