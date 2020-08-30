@@ -49,6 +49,8 @@ public class ClientConnection implements Runnable{
     	
     	x=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
     	y=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
+    
+    	Server.sendMessageToAll("join:"+name);
     	
     }
     
@@ -457,6 +459,7 @@ public class ClientConnection implements Runnable{
 			if(isLoggedIn()) {
 				Server.clog(" "+name+" hat sich ausgeloggt!");
 				Server.infoToAll(name + " left the Game!");
+				Server.sendMessageToAll("leave:"+name);
 			}else {
 				Server.clog("Ein nicht verifizierter Client hat sich wieder ausgeloggt!");
 			}
