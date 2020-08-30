@@ -30,8 +30,9 @@ public class Server {
     
     public static ClientConnection getConnectionByName(String name) {
 		for(int i = 0; i<connections.size();i++) {
-			if(connections.get(i).name.equalsIgnoreCase(name))
-				return connections.get(i);
+			if(connections.get(i).isLoggedIn())
+				if(connections.get(i).name.equalsIgnoreCase(name))
+					return connections.get(i);
 		}
 		return null;
 	}
@@ -39,8 +40,9 @@ public class Server {
     public static ClientConnection findPlayerByName(ClientConnection caller, String name) {
     	ClientConnection found = null;
 		for(int i = 0; i<connections.size();i++) {
-			if(connections.get(i).name.equalsIgnoreCase(name))
-				found = connections.get(i);
+			if(connections.get(i).isLoggedIn())
+				if(connections.get(i).name.equalsIgnoreCase(name))
+					found = connections.get(i);
 		}
 		if(found!=null) {
 			//Spieler gefunden
