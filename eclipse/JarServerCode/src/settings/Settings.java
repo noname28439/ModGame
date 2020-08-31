@@ -22,7 +22,7 @@ public class Settings {
     //DelayBalance
     public static float 
     delay_recieve_arrayOutOfBound = 0.3f,
-    delay_maprequest_isNormal = 0.1f,
+    delay_maprequest_isNormal = 0.02f,
     delay_maprequest_tileID = 1,
     delay_chat_send = 0.1f,
     delay_mapInteraction_createWall = 10,
