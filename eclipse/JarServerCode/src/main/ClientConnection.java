@@ -22,7 +22,7 @@ public class ClientConnection implements Runnable{
 	float delay = 0;
 	
 	//Basic Values
-	int hp = 0;
+	float hp = 0;
 	int x=0,y=0;
 	int points = 0;
 	
@@ -182,6 +182,7 @@ public class ClientConnection implements Runnable{
 	    	}else {
 	    		delay = 0;
 	    	}
+	    	hp+=0.1f;
 	    }
 	    
 	    public void delayAdd(float amount) {
