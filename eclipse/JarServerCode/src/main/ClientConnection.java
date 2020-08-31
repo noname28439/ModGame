@@ -102,12 +102,12 @@ public class ClientConnection implements Runnable{
         		punish(Settings.delay_playerAttack);
     		}else {
     			//Player not in Range!
-    			sendFeedbackMessage("attack(range)", false);
+    			sendFeedbackMessage("attack["+player+"](range)", false);
         		punish(Settings.delay_playerAttack__OUT_OF_RANGE);
     		}
     	}else {
     		//No player with this Name found!
-    		sendFeedbackMessage("attack(name)", false);
+    		sendFeedbackMessage("attack["+player+"](name)", false);
     		punish(Settings.delay_playerAttack__NAME_NOT_FOUND);
     	}
     	
@@ -285,7 +285,7 @@ public class ClientConnection implements Runnable{
 				
 				
 				
-				if(isLoggedIn()&&!isStunned()) {
+				if(isLoggedIn()) {
 					//Character Controlls
 					
 					
@@ -318,7 +318,7 @@ public class ClientConnection implements Runnable{
 						
 						
 					}
-					
+					if(!isStunned())
 					if(args[0].equalsIgnoreCase("attack")) {
 						attack(args[1]);
 					}
@@ -340,7 +340,7 @@ public class ClientConnection implements Runnable{
 						
 					}
 					
-					
+					if(!isStunned())
 					if(args[0].equalsIgnoreCase("chat")) {
 						Server.chatSend(args[1]);
 						punish(Settings.delay_chat_send);
@@ -389,7 +389,7 @@ public class ClientConnection implements Runnable{
 							
 							
 						}
-						
+						if(!isStunned())
 						if(args[1].equalsIgnoreCase("set")) {
 							if(args[2].equalsIgnoreCase("currentTileKey")) {
 								int rcvValue = Integer.valueOf(args[3]);
