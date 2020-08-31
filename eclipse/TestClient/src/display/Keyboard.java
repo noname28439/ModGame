@@ -9,11 +9,11 @@ import java.awt.event.MouseMotionListener;
 
 public class Keyboard implements KeyListener,MouseMotionListener, MouseListener{
 
-	private static boolean[] keys = new boolean[1024];
+	public static boolean[] keys = new boolean[1024];
 	
 	private static int mousex;
 	private static int mousey;
-	private static int button;
+	public static int button;
 	public static int getMousex() {
 		return mousex;
 	}

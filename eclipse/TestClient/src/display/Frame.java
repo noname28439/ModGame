@@ -9,6 +9,8 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import game.World;
+
 
 public class Frame extends JFrame{
 
@@ -52,15 +54,14 @@ public class Frame extends JFrame{
 		g.fillRect(0, 0, 10000, 10000);
 		
 		
-		//else
-		//Client_World.draw(g);
+		World.draw(g);
 		
 		
 		
 	}
 	
 	public void update(float tslf) {
-		//Client_World.update(tslf);
+		World.update();
 	}
 	
 }
