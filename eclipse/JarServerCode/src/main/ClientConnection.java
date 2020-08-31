@@ -322,7 +322,7 @@ public class ClientConnection implements Runnable{
 					if(args[0].equalsIgnoreCase("attack")) {
 						attack(args[1]);
 					}
-					
+					if(!isStunned())
 					if(args[0].equalsIgnoreCase("move")) {
 						move(Float.valueOf(args[1]), Float.valueOf(args[2]));
 					}
