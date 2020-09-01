@@ -93,6 +93,7 @@ public class ClientConnection implements Runnable{
         		if(result.checkDead()) {
         			sendFeedbackMessage("kill", true);
         			//Player isDead
+        			hp=Settings.player_hp;
         			points+=Integer.valueOf(result.points/10);
         			result.resetPosition();
         			result.resetKillstreak();
