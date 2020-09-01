@@ -182,6 +182,7 @@ public class ClientConnection implements Runnable{
 	    	}else {
 	    		delay = 0;
 	    	}
+	    	if(hp<Settings.player_hp_max)
 	    	hp+=0.1f;
 	    }
 	    
@@ -375,7 +376,7 @@ public class ClientConnection implements Runnable{
 						if(args[1].equalsIgnoreCase("get")) {
 							
 							
-							if(args[2].equalsIgnoreCase("HP")) {returnDataRequestResult("HP", hp);}
+							if(args[2].equalsIgnoreCase("HP")) {returnDataRequestResult("HP", (int)hp);}
 							
 							if(args[2].equalsIgnoreCase("posX")) {returnDataRequestResult("posX", x);}
 							if(args[2].equalsIgnoreCase("posY")) {returnDataRequestResult("posY", y);}

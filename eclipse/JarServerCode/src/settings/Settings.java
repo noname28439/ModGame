@@ -18,6 +18,7 @@ public class Settings {
     public static int player_move_radius = 10;
     public static int player_interact_tile_radius = 3;
     public static int player_sneaking_detectRange = 30;
+    public static int player_hp_max = 200;
     
     //DelayBalance
     public static float 
