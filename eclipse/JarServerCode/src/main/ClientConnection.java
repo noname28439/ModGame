@@ -47,8 +47,8 @@ public class ClientConnection implements Runnable{
     	//Set basic Player values
     	hp = Settings.player_hp;
     	
-    	x=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
-    	y=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
+    	
+    	resetPosition();
     	
     }
     
@@ -241,12 +241,17 @@ public class ClientConnection implements Runnable{
     	punish(Settings.delay_mapInteraction_createTrap);
     }
     
+    public void resetTileAtCurrentPos() {
+    	createSpecialTileAtSpecificPos(this.x, this.y, Tile.NORMAL);
+    	punish(Settings.delay_mapInteraction_resetTile);
+    }
+    
     public void createSpecialTileAtSpecificPos(int x, int y, int tileID) {
     	if(!(Server.calculateDistanceBetweenPoints(this.x, this.y, x, y)>Settings.player_interact_tile_radius)) {
     		World.getTile(x, y).setID(tileID);
     		World.getTile(x, y).setKey(currentTileKey);
     		World.getTile(x, y).setOwner(name);
-    		sendFeedbackMessage("wallCreation["+x+"|"+y+"]", true);
+    		sendFeedbackMessage("tileUpdate["+x+"|"+y+"]", true);
     	}else
     		punish(Settings.delay_mapInteraction_resetTileID__OUT_OF_RANGE);
     	
@@ -263,8 +268,8 @@ public class ClientConnection implements Runnable{
     }
     
     public void resetPosition() {
-    	x=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
-    	y=(Settings.mapsize/2)+(new Random().nextInt(200)-100);
+    	x=(Settings.mapsize/2)+(new Random().nextInt(Settings.spawnRadius*2)-Settings.spawnRadius);
+    	y=(Settings.mapsize/2)+(new Random().nextInt(Settings.spawnRadius*2)-Settings.spawnRadius);
     }
     
     public void resetKillstreak() {
@@ -341,6 +346,13 @@ public class ClientConnection implements Runnable{
 						if(args[1].equalsIgnoreCase("trap")) {
 							createTrapAtCurrentPos();
 						}
+						if(args[1].equalsIgnoreCase("normal")) {
+							Tile before = World.getTile(x, y);
+							if(before.getKey()==currentTileKey)
+								createTrapAtCurrentPos();
+							else
+								sendFeedbackMessage("tileReset["+x+"|"+y+"](key)", false);
+						}
 						
 					}
 					
@@ -390,6 +402,13 @@ public class ClientConnection implements Runnable{
 							if(args[2].equalsIgnoreCase("currentDamage")) {returnDataRequestResult("currentDamage", calculateDamage());}
 							
 							if(args[2].equalsIgnoreCase("sneaking")) {returnDataRequestResult("sneaking", sneaking);}
+							
+							if(args[2].equalsIgnoreCase("points")) {returnDataRequestResult("points", points);}
+							
+							
+							if(args[2].equalsIgnoreCase("mapsize")) {returnDataRequestResult("mapsize", Settings.mapsize);}
+							
+							
 							
 							
 						}
