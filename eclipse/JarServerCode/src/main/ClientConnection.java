@@ -96,6 +96,7 @@ public class ClientConnection implements Runnable{
         			if(hp<100)
         			hp=Settings.player_hp;
         			points+=Integer.valueOf(result.points/10);
+        			points++;
         			result.resetPosition();
         			result.resetKillstreak();
         			result.resetHP();
