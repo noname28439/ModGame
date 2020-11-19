@@ -18,14 +18,15 @@ if True:
     def user_exists(name):
         c.execute("SELECT * FROM users WHERE username='" + name + "'")
         data = c.fetchall()
-        if len(data) == 1:
-            return 1
-        else:
+        print(len(data))
+        if len(data) == 0:
             return 0
+        else:
+            return 1
         conn.commit()
 
     def add_user(name, pw, email):
-        if check_access(name, "NICHTWICHTIG") == 2:     #Noch kein User mit diesem Namen
+        if not user_exists(name):     #Noch kein User mit diesem Namen
             c.execute("INSERT INTO " + DB_NAME + " VALUES ('" + str(name) + "','" + hash_string(pw) + "','" + str(email) + "')")
             conn.commit()
             return 0;

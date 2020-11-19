@@ -290,7 +290,7 @@ public class ClientConnection implements Runnable{
 			
 				String recv = in.nextLine();
 				//System.err.println("[FROM_CLIENT] --> "+recv);
-				iclog(recv);
+				//iclog(recv);
 				String[] args = recv.split(Settings.connection_message_seperator);
 				
 				
@@ -319,8 +319,8 @@ public class ClientConnection implements Runnable{
 					if(args[0].equalsIgnoreCase("playerlist")) {
 						String playerlist = "";
 						
-						for(int i = 0; i<Server.connections.size();i++) {
-							playerlist+=("_"+Server.connections.get(i).name);
+						for(int i = 0; i<Server.getConnections().size();i++) {
+							playerlist+=("_"+Server.getConnections().get(i).name);
 						}
 						playerlist = playerlist.replaceFirst("_", "");
 						
@@ -332,6 +332,13 @@ public class ClientConnection implements Runnable{
 					if(args[0].equalsIgnoreCase("attack")) {
 						attack(args[1]);
 					}
+					
+					if(!isStunned())
+						if(args[0].equalsIgnoreCase("regen")) {
+							hp+=2;
+							punish(1);
+						}
+					
 					if(!isStunned())
 					if(args[0].equalsIgnoreCase("move")) {
 						move(Float.valueOf(args[1]), Float.valueOf(args[2]));

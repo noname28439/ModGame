@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Player Score List</title>
+    <title>Alltime Player Score List</title>
     <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='styles/main_style.css')}}">
 </head>
 <body>
@@ -10,26 +10,26 @@
 {{PY_NAVIBAR}}
 
 <script>
-    targetMethod="now";
+    targetMethod="ever";
 </script>
 
 <div id="gb-erc">
 
 
-<h1 class="header">Best Players currently on the Server</h1>
+    <h1 class="header">Best Players ever on the Server</h1>
 
 
-<div id="PlayerRankSystemMainDiv">
+    <div id="PlayerRankSystemMainDiv">
         <ol id="PlayerRankSystemPlayerList">
 
 
         </ol>
 
-</div>
+    </div>
 
 
 
-<script src="{{url_for('static', filename='scripts/PlayerRankLoader.js')}}"></script>
+    <script src="{{url_for('static', filename='scripts/PlayerRankLoader.js')}}"></script>
 
 </div>
 

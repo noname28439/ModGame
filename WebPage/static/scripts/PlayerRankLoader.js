@@ -16,12 +16,16 @@ setInterval(function (){
 },500);
 
 
+if(targetMethod==null)
+    targetMethod = "now"
 
 
 
 function load_API_json_page(method, url) {
     var request = new XMLHttpRequest();
-    request.open(method,url);
+    request.open(method,url, true);
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
 
     request.addEventListener('load', function(event) {
         if (request.status >= 200 && request.status < 300) {
@@ -36,7 +40,7 @@ function load_API_json_page(method, url) {
 
             var rcvargs = rcvstr[i].split(":");
 
-                playerRankDiv.innerHTML+="<li><code class='PlayerRankSystemPlayerLine'>"+rcvargs[0] + " --> "+rcvargs[1]+" [KillStreak]</code></li>"
+                playerRankDiv.innerHTML+="<li><code class='PlayerRankSystemPlayerLine'>"+rcvargs[0] + " --> "+rcvargs[1]+" [Points]</code></li>"
             }
 
 
@@ -45,7 +49,7 @@ function load_API_json_page(method, url) {
             console.log(request.statusText, request.responseText);
         }
     });
-    request.send();
+    request.send("target="+targetMethod);
 }
 
 function sortList(list){
@@ -64,7 +68,7 @@ function sortList(list){
 
     //console.log(numlist);
 
-    for(var i = 0; i< numlist.length;i++){
+    for(var i = 0; i< numlist.length;i++) {
         var foundName = "ERROR-NameNotFound";
         var number = numlist[i];
         for(var ii = 0; ii<list.length;ii++){

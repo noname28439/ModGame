@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, session, Markup, redirect, jsonify
+from flask import Flask, render_template, request, url_for, session, Markup, redirect, jsonify, escape
 import random
 import dataBaseManager as DBM
 import dataBaseManager
@@ -20,6 +20,7 @@ DBM.set_pw_salt(SECRET_KEY)
 
 naviBar = Markup("""
 <ul class="navi">
+    <li><a class="aktiv wasonpage" href="/rank/bestPlayersAll">Alltime Scores</a> </li>
     <li><a class="aktiv wasonpage" href="/rank/bestPlayers">Scores</a> </li>
     <li><a class="aktiv wasonpage" href="/login">Login</a></li>
     <li><a class="aktiv wasonpage" href="/register">Registration</a></li>
@@ -53,24 +54,45 @@ def showShortMessage(text):
 def index():
     return redirect("/rank/bestPlayers")
 
-
 fakePlayerScoreList = ["S.Bot_1:2865","S.Bot_7:2864","XVC-Bot:2984","GG:2865","Noname:1480","S.Bot_4:2863","A:1003","TestClient:307","NoBot:2"]
 
 @app.route("/rank/bestPlayers")
-def rank_page():
+def rank_pageAll():
     return render_template("scores.html", PY_NAVIBAR=naviBar)
+
+@app.route("/rank/bestPlayersAll")
+def rank_page():
+    return render_template("scoresAll.html", PY_NAVIBAR=naviBar)
+
 @app.route("/rank/requestAPI", methods=["POST"])
 def rank_api():
-    chosenSlot = random.randint(0,len(fakePlayerScoreList)-1)
-    fakePlayerScoreList[chosenSlot] = fakePlayerScoreList[chosenSlot].split(":")[0]+":"+str(int(fakePlayerScoreList[chosenSlot].split(":")[1])+1)
-    return jsonify(fakePlayerScoreList)
+    if request.method == "POST":
+        if request.form["target"] == "now":
+            with open("./z_now.best", "r") as file:
+                content = file.read()
+                content=content[:-1]
+                content = content.split("\n")
+                print(content)
+                return jsonify(content)
+        elif request.form["target"] == "ever":
+            with open("./z_ever.best", "r") as file:
+                content = file.read()
+                content=content[:-1]
+                content = content.split("\n")
+                print(content)
+                return jsonify(content)
+        else:
+            return Markup("<h1>Krasser ERROR du Knecht!!!</h1>")
+    else:
+        return Markup("<h1>ERROR du Keck!</h1>")
+
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        name = request.form["username"]
-        pw = request.form["password"]
+        name = (request.form["username"])
+        pw = (request.form["password"])
         access = dataBaseManager.check_access(name, pw)
 
         if access == 0:         #Access
@@ -88,23 +110,28 @@ def login():
 def register():
     if request.method == "POST":
 
-        name = request.form["username"]
-        email = request.form["email"]
-        pw = request.form["password"]
-        pw2 = request.form["password2"]
+        name = (request.form["username"])
+        email = (request.form["email"])
+        pw = (request.form["password"])
+        pw2 = (request.form["password2"])
 
         if not pw==pw2:
             return showShortMessage("Die eingegebenen Passwörter sind nicht identisch!")
         if dataBaseManager.user_exists(name):
             return showShortMessage("Es gibt bereits einen Nutzer mit dem Namen "+name+"!")
 
+        if(len(name)>16):
+            return showShortMessage("Dein Name darf nicht länger als 16 Zeichen sein! [" + name + "]")
+
+        if(":" in name):
+            return showShortMessage("Dein Name darf keine Doppelpunkte enthalten! [" + name + "]")
 
         result = dataBaseManager.add_user(name, pw, email)
 
         if result==0:
-            return showShortMessage("Es gibt bereits einen Nutzer mit dem Namen " + name + "!")
+            return Markup("<h1>Account "+name+" erfolgreich erstellt, du kannst dich jetzt mit deinen Anmeldedaten <a href=\"./login\">einloggen</a>!</h1><!--<br><button style=\"font-size: xx-large;\"><a href=\"https://github.com/noname28439/ModGame\">Weitere Informationen findest du auf dem Github des Projektes!</a></button>-->")
         elif result==1:
-            return showShortMessage("Beim Erstellen des Accounts ist ein Fehler aufgetreten!")
+            return showShortMessage("Es gibt bereits einen Nutzer mit dem Namen " + name + "!")
 
     elif request.method == "GET":
         return render_template("register.html", PY_NAVIBAR=naviBar)

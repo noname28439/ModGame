@@ -4,10 +4,15 @@ public class Settings {
 
 	
 	//Server
-    public static int PORT = 25565;
+    public static int PORT = 25566;
     public static String userDB_file_Path = "D:\\Programmieren\\1_ModGame\\WebPage\\userDB.db";
+    
+    public static String bestPlayer_ever_file_Path = "D:\\Programmieren\\1_ModGame\\WebPage\\z_ever.best";
+    public static String bestPlayer_now_file_Path = "D:\\Programmieren\\1_ModGame\\WebPage\\z_now.best";
+    public static int PlayerRankFileListUpdateDelay = 1000;
+    
     public static String connection_message_seperator = ":";
-    public static int ClientConnectionLimit = 3;
+    public static int ClientConnectionLimit = 5;
     public static int mapsize = 2000;
     public static int spawnRadius = 300;
     

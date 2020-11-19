@@ -21,6 +21,16 @@ public class Server {
     
     //Basic helpingFunctions
     
+    public static ArrayList<ClientConnection> getConnections() {
+    	ArrayList<ClientConnection> toReturn = new ArrayList<>();
+    	
+    	for(int i = 0; i<connections.size();i++)
+    		if(connections.get(i).isLoggedIn())
+    			toReturn.add(connections.get(i));
+    	return toReturn;
+    }
+    
+    
     
     public static void chatSend(String text) {
     	sendMessageToAll(buildMesssage(new String[] {"MESSAGE","CHAT",text}));

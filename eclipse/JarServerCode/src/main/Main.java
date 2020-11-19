@@ -16,6 +16,7 @@ public class Main {
     
     public static void main(String[] args) {
     	DelayThread.start();
+    	Thread_UpdatePlayerRanking.start();
     	Server.start();
     	
     	
