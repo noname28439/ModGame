@@ -12,7 +12,7 @@ public class Settings {
     public static int PlayerRankFileListUpdateDelay = 1000;
     
     public static String connection_message_seperator = ":";
-    public static int ClientConnectionLimit = 5;
+    public static int ClientConnectionLimit = 3;
     public static int mapsize = 2000;
     public static int spawnRadius = 300;
     
