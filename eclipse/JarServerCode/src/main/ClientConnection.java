@@ -3,6 +3,7 @@ package main;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -88,20 +89,7 @@ public class ClientConnection implements Runnable{
     	ClientConnection result = Server.getConnectionByName(player);
     	if(result!=null) {
     		if(Server.canPlayerAttack(this, result)) {
-    			result.hp-=calculateDamage();
-    			sendFeedbackMessage("attack["+player+"]", true);
-        		if(result.checkDead()) {
-        			sendFeedbackMessage("kill", true);
-        			//Player isDead
-        			if(hp<100)
-        			hp=Settings.player_hp;
-        			points+=Integer.valueOf(result.points/10);
-        			points++;
-        			result.resetPosition();
-        			result.resetKillstreak();
-        			result.resetHP();
-        			Server.clog(name+" killed "+result.name);
-        		}
+    			damageOtherPlayer(result);
         		punish(Settings.delay_playerAttack);
     		}else {
     			//Player not in Range!
@@ -114,6 +102,34 @@ public class ClientConnection implements Runnable{
     		punish(Settings.delay_playerAttack__NAME_NOT_FOUND);
     	}
     	
+    }
+    
+    public void attackpos(int x, int y) {
+    		if(Server.canPlayerAttackPos(this, x, y)) {
+    			ArrayList<ClientConnection> playersOnAimedTile = Server.getPlayersOnCoord(x, y);
+    			
+    			for(ClientConnection result : playersOnAimedTile) {
+    				damageOtherPlayer(result);
+            		punish(Settings.delay_playerAttack);
+        		}
+    		}
+    }
+    
+    void damageOtherPlayer(ClientConnection target) {
+    	target.hp-=calculateDamage();
+		sendFeedbackMessage("attack["+target.name+"]", true);
+		if(target.checkDead()) {
+			sendFeedbackMessage("kill", true);
+			//Player isDead
+			if(hp<100)
+			hp=Settings.player_hp;
+			points+=Integer.valueOf(target.points/10);
+			points++;
+			target.resetPosition();
+			target.resetKillstreak();
+			target.resetHP();
+			Server.clog(name+" killed "+target.name);
+		}
     }
     
     
@@ -331,6 +347,10 @@ public class ClientConnection implements Runnable{
 					if(!isStunned())
 					if(args[0].equalsIgnoreCase("attack")) {
 						attack(args[1]);
+					}
+					
+					if(args[0].equalsIgnoreCase("attackpos")) {
+						attackpos(Integer.valueOf(args[1]), Integer.valueOf(args[2]));
 					}
 					
 					if(!isStunned())

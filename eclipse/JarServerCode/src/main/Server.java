@@ -69,6 +69,17 @@ public class Server {
 		return null;
 	}
     
+    public static ArrayList<ClientConnection> getPlayersOnCoord(int x, int y) {
+    	
+    	ArrayList<ClientConnection> found = new ArrayList<>();
+    	
+		for(int i = 0; i<connections.size();i++) {
+			if(connections.get(i).isLoggedIn())
+				found.add(connections.get(i));
+		}
+		return null;
+	}
+    
 	public static void sendMessageToAll(String text) {
 		for(int i = 0; i<connections.size();i++)
 			connections.get(i).sendMessage(text);
@@ -98,6 +109,9 @@ public class Server {
 	
 	public static boolean canPlayerAttack(ClientConnection attacker, ClientConnection target) {
 		return (calculateDistanceBetweenPoints(attacker.x, attacker.y, target.x, target.y)<Settings.player_attack_radius);
+	}
+	public static boolean canPlayerAttackPos(ClientConnection attacker, int x, int y) {
+		return (calculateDistanceBetweenPoints(attacker.x, attacker.y, x, y)<Settings.player_attack_radius);
 	}
 	
 	static double calculateDistanceBetweenPoints(
