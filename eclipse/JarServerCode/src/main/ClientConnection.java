@@ -31,6 +31,7 @@ public class ClientConnection implements Runnable{
 	int currentTileKey = 0;
 	boolean sneaking = false;
 	int currentAttackRadius = Settings.player_attack_default_radius;
+	int currentMovementRadius = Settings.player_move_default_radius;
 	
 	
     public ClientConnection(Socket connection){
@@ -89,22 +90,7 @@ public class ClientConnection implements Runnable{
     	ClientConnection result = Server.getConnectionByName(player);
     	if(result!=null) {
     		if(Server.canPlayerAttack(this, result)) {
-<<<<<<< HEAD
     			damageOtherPlayer(result);
-=======
-    			result.hp-=calculateDamage();
-    			sendFeedbackMessage("attack["+player+"]", true);
-        		if(result.checkDead()) {
-        			sendFeedbackMessage("kill", true);
-        			//Player isDead
-        			hp=Settings.player_hp;
-        			points+=Integer.valueOf(result.points/10);
-        			result.resetPosition();
-        			result.resetKillstreak();
-        			result.resetHP();
-        			Server.clog(name+" killed "+result.name);
-        		}
->>>>>>> parent of 7872060... bugfix: player hp reset to 100 with kill
         		punish(Settings.delay_playerAttack);
     		}else {
     			//Player not in Range!
@@ -163,7 +149,7 @@ public class ClientConnection implements Runnable{
     	int tox = (int)(x+mvx);
     	int toy = (int)(y+mvy);
     	
-    	if(!(distance>Settings.player_move_radius)) {
+    	if(!(distance>currentMovementRadius)) {
     		Tile jumpTo = World.getTile(tox, toy);
     		if(jumpTo==null) {
     			sendFeedbackMessage("move(border)", false);
@@ -199,7 +185,6 @@ public class ClientConnection implements Runnable{
 			case 4:	//Tower
 				currentAttackRadius=Settings.player_attack_tower_radius;
 				for_move_set_x_and_y(tox,toy);
-				//---------------------------------------------------------------------------------ExecuteTrapAttack------------------------------------------------------------------------------
 			break;
 
 			default:
@@ -475,6 +460,11 @@ public class ClientConnection implements Runnable{
 							}
 							if(args[2].equalsIgnoreCase("sneaking")) {
 								sneaking = Boolean.valueOf(args[3]);
+								if(sneaking) {
+									 currentMovementRadius = Settings.player_move_sneaking_radius;
+								}else {
+									currentMovementRadius = Settings.player_move_default_radius;
+								}
 							}
 							
 						}
