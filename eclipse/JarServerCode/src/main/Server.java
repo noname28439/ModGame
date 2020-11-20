@@ -108,10 +108,10 @@ public class Server {
 	}
 	
 	public static boolean canPlayerAttack(ClientConnection attacker, ClientConnection target) {
-		return (calculateDistanceBetweenPoints(attacker.x, attacker.y, target.x, target.y)<Settings.player_attack_radius);
+		return (calculateDistanceBetweenPoints(attacker.x, attacker.y, target.x, target.y)<attacker.currentAttackRadius);
 	}
 	public static boolean canPlayerAttackPos(ClientConnection attacker, int x, int y) {
-		return (calculateDistanceBetweenPoints(attacker.x, attacker.y, x, y)<Settings.player_attack_radius);
+		return (calculateDistanceBetweenPoints(attacker.x, attacker.y, x, y)<attacker.currentAttackRadius);
 	}
 	
 	static double calculateDistanceBetweenPoints(

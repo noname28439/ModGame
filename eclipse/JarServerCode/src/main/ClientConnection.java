@@ -30,7 +30,7 @@ public class ClientConnection implements Runnable{
 	//Ingame Functions
 	int currentTileKey = 0;
 	boolean sneaking = false;
-	
+	int currentAttackRadius = Settings.player_attack_default_radius;
 	
 	
     public ClientConnection(Socket connection){
@@ -157,13 +157,16 @@ public class ClientConnection implements Runnable{
     		}else
     		switch (jumpTo.getID()) {
 			case 0:	//Normal
+				currentAttackRadius=Settings.player_attack_default_radius;
 				for_move_set_x_and_y(tox,toy);
 				punish(Settings.delay_playerMovement_normal);
 				break;
 			case 1:	//Highway
+				currentAttackRadius=Settings.player_attack_default_radius;
 				for_move_set_x_and_y(tox,toy);
 				break;
 			case 2:	//Wall
+				currentAttackRadius=Settings.player_attack_default_radius;
 				if(currentTileKey == jumpTo.getKey()) {
 					for_move_set_x_and_y(tox,toy);
 					punish(Settings.delay_playerMovement_wall);
@@ -173,6 +176,13 @@ public class ClientConnection implements Runnable{
 				}
 				break;
 			case 3:	//Trap
+				currentAttackRadius=Settings.player_attack_default_radius;
+				for_move_set_x_and_y(tox,toy);
+				//---------------------------------------------------------------------------------ExecuteTrapAttack------------------------------------------------------------------------------
+			break;
+			
+			case 4:	//Tower
+				currentAttackRadius=Settings.player_attack_tower_radius;
 				for_move_set_x_and_y(tox,toy);
 				//---------------------------------------------------------------------------------ExecuteTrapAttack------------------------------------------------------------------------------
 			break;

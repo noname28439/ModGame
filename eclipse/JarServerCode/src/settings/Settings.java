@@ -20,7 +20,8 @@ public class Settings {
     public static int player_delay_regeneration_delay = 100;
     public static int player_hp = 100;
     public static int player_damage = 5;
-    public static int player_attack_radius = 10;
+    public static int player_attack_default_radius = 10;
+    public static int player_attack_tower_radius = player_attack_default_radius*2;
     public static int player_move_radius = 10;
     public static int player_interact_tile_radius = 3;
     public static int player_sneaking_detectRange = 30;

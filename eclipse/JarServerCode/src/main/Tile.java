@@ -6,7 +6,8 @@ public class Tile {
 	NORMAL = 0,
 	HIGHWAY = 1,
 	WALL = 2,
-	TRAP = 3
+	TRAP = 3,
+	TOWER = 4
 	;
 	
 	
