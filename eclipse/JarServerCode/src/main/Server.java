@@ -75,7 +75,8 @@ public class Server {
     	
 		for(int i = 0; i<connections.size();i++) {
 			if(connections.get(i).isLoggedIn())
-				found.add(connections.get(i));
+				if(connections.get(i).x == x && connections.get(i).y == y)
+					found.add(connections.get(i));
 		}
 		return null;
 	}
