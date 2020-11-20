@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 
 
 
@@ -140,7 +141,9 @@ public static void list(String location) {
 		
 	}
 	
-	public static void read(Path datei) {
+	public static ArrayList<String> read(Path datei) {
+		
+		ArrayList<String> toReturn = new ArrayList<>();
 		
 		if(Files.exists(datei)) {
 		
@@ -148,7 +151,7 @@ public static void list(String location) {
 			
 			String line;
 			while((line = br.readLine()) != null) {
-				System.out.println(line);
+				toReturn.add(line);
 			}
 			
 			
@@ -157,6 +160,8 @@ public static void list(String location) {
 		}else {
 			System.out.println("Error: Data not found!");
 		}
+		
+		return toReturn;
 	}
 	
 public static boolean FilecontainsString(Path datei, String search) {

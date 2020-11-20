@@ -89,7 +89,22 @@ public class ClientConnection implements Runnable{
     	ClientConnection result = Server.getConnectionByName(player);
     	if(result!=null) {
     		if(Server.canPlayerAttack(this, result)) {
+<<<<<<< HEAD
     			damageOtherPlayer(result);
+=======
+    			result.hp-=calculateDamage();
+    			sendFeedbackMessage("attack["+player+"]", true);
+        		if(result.checkDead()) {
+        			sendFeedbackMessage("kill", true);
+        			//Player isDead
+        			hp=Settings.player_hp;
+        			points+=Integer.valueOf(result.points/10);
+        			result.resetPosition();
+        			result.resetKillstreak();
+        			result.resetHP();
+        			Server.clog(name+" killed "+result.name);
+        		}
+>>>>>>> parent of 7872060... bugfix: player hp reset to 100 with kill
         		punish(Settings.delay_playerAttack);
     		}else {
     			//Player not in Range!

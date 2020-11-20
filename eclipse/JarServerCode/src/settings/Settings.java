@@ -1,7 +1,63 @@
 package settings;
 
+import java.lang.reflect.Field;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+
+import com.sun.org.apache.bcel.internal.generic.CPInstruction;
+
+import main.DateiReader;
+
 public class Settings {
 
+	
+	public static void loadFromFile(String path) {
+		ArrayList<String> content = DateiReader.read(Paths.get(path));
+		
+		for(String cl : content) {
+			String type = cl.split(":")[0];
+			String tag = cl.split(":")[1];
+			String value = cl.split(":")[2];
+			
+			try {
+				Field foundField = Settings.class.getField(tag);
+				
+				
+				try {
+					switch (type) {
+					case "String":
+							foundField.set(null, value);
+							System.out.println("Successfully set "+tag+" to "+value);
+						break;
+					case "int":
+						foundField.set(null, Integer.valueOf(value));
+						System.out.println("Successfully set "+tag+" to "+value);
+						break;
+					case "float":
+						foundField.set(null, Float.valueOf(value));
+						System.out.println("Successfully set "+tag+" to "+value);
+						break;
+					case "boolean":
+						foundField.set(null, Boolean.valueOf(value));
+						System.out.println("Successfully set "+tag+" to "+value);
+						break;
+	
+					default:
+						System.out.println("ERROR: No valid datatype [\""+type+"\"]");
+						break;
+					}
+					
+				} catch (IllegalArgumentException | IllegalAccessException e) {e.printStackTrace();}
+				
+				
+			} catch (NoSuchFieldException | SecurityException e) {
+				System.out.println("ERROR: No Setting named \""+tag+"\" found!");
+			}
+			
+		}
+		
+	}
 	
 	//Server
     public static int PORT = 25566;
