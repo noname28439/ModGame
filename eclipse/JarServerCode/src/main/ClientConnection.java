@@ -178,6 +178,9 @@ public class ClientConnection implements Runnable{
 				break;
 			case 3:	//Trap
 				currentAttackRadius=Settings.player_attack_default_radius;
+				if(currentTileKey != jumpTo.getKey()) {
+					Server.trapDamagePlayer(this, jumpTo);
+				}
 				for_move_set_x_and_y(tox,toy);
 				
 			break;

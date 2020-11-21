@@ -123,7 +123,7 @@ public class Server {
 			    return Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
 			}
     
-	void trapDamagePlayer(ClientConnection target, Tile trapTile) {
+	public static void trapDamagePlayer(ClientConnection target, Tile trapTile) {
     	target.hp-=Settings.trap_damage;
 		if(getConnectionByName(trapTile.getOwner())!=null) {
 			//TrapOwner online
