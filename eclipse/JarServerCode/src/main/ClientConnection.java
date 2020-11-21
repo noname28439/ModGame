@@ -121,7 +121,7 @@ public class ClientConnection implements Runnable{
 		sendFeedbackMessage("attack["+target.name+"]", true);
 		if(target.checkDead()) {
 			sendFeedbackMessage("kill", true);
-			//Player isDead
+			//Target has no more HP
 			if(hp<100)
 			hp=Settings.player_hp;
 			points+=Integer.valueOf(target.points/10);
@@ -179,7 +179,7 @@ public class ClientConnection implements Runnable{
 			case 3:	//Trap
 				currentAttackRadius=Settings.player_attack_default_radius;
 				for_move_set_x_and_y(tox,toy);
-				//---------------------------------------------------------------------------------ExecuteTrapAttack------------------------------------------------------------------------------
+				
 			break;
 			
 			case 4:	//Tower
@@ -188,6 +188,11 @@ public class ClientConnection implements Runnable{
 			break;
 
 			default:
+				try {
+					throw new Exception("Invalid TileID at "+x+"|"+y);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 			}
     	}else {

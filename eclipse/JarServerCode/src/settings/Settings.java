@@ -84,6 +84,8 @@ public class Settings {
     public static int player_sneaking_detectRange = 30;
     public static int player_hp_max = 200;
     
+    public static int trap_damage = 100;
+    
     //DelayBalance
     public static float
     delay_recieve_arrayOutOfBound = 0.3f,

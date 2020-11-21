@@ -123,6 +123,28 @@ public class Server {
 			    return Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
 			}
     
+	void trapDamagePlayer(ClientConnection target, Tile trapTile) {
+    	target.hp-=Settings.trap_damage;
+		if(getConnectionByName(trapTile.getOwner())!=null) {
+			//TrapOwner online
+			ClientConnection trapOwner = getConnectionByName(trapTile.getOwner());
+			trapOwner.sendFeedbackMessage("trap["+target.name+"]", true);
+			if(target.checkDead()) {
+				//Target has no more HP
+				trapOwner.points+=Integer.valueOf(target.points/10);
+				trapOwner.points++;
+				target.resetPosition();
+				target.resetKillstreak();
+				target.resetHP();
+				Server.clog(trapOwner.name+" trapped "+target.name+" to death!");
+			}
+		}else {
+			//Trapowner offline
+		}
+		
+    }
+	
+	
     public static void start() {
     	
 
