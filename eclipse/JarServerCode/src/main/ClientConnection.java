@@ -47,7 +47,7 @@ public class ClientConnection implements Runnable{
     	listener.start();
     	
     	//Set basic Player values
-    	hp = Settings.player_hp;
+    	hp = Settings.player_hp_spawn;
     	
     	
     	resetPosition();
@@ -125,8 +125,8 @@ public class ClientConnection implements Runnable{
 		if(target.checkDead()) {
 			sendFeedbackMessage("kill", true);
 			//Target has no more HP
-			if(hp<100)
-			hp=Settings.player_hp;
+			if(hp<Settings.player_hp_kill_regen)
+				hp=Settings.player_hp_kill_regen;
 			points+=Integer.valueOf(target.points/10);
 			points++;
 			target.resetPosition();
@@ -315,7 +315,7 @@ public class ClientConnection implements Runnable{
     }
     
     public void resetHP() {
-    	hp=Settings.player_hp;
+    	hp=Settings.player_hp_spawn;
     }
     
 	@Override
