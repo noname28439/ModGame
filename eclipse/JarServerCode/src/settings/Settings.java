@@ -67,6 +67,9 @@ public class Settings {
     public static String bestPlayer_now_file_Path = "D:\\Programmieren\\1_ModGame\\WebPage\\z_now.best";
     public static int PlayerRankFileListUpdateDelay = 1000;
     
+    
+    public static boolean friendlyFire = false;			//false: Spieler der selben IP können sich nicht angereifen | true: Spieler der selben IP können sich angreifen
+    
     public static String connection_message_seperator = ":";
     public static int ClientConnectionLimit = 3;
     public static int mapsize = 2000;

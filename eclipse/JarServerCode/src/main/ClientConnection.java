@@ -13,7 +13,7 @@ import settings.Settings;
 public class ClientConnection implements Runnable{
 
 	//Connection
-	Socket connection;
+	public Socket connection;
 	String name;
 	PrintStream out;
 	Scanner in;
@@ -88,6 +88,9 @@ public class ClientConnection implements Runnable{
     
     public void attack(String player) {
     	ClientConnection result = Server.getConnectionByName(player);
+    	if(!Settings.friendlyFire && connection.getInetAddress().toString().equalsIgnoreCase(result.connection.getInetAddress().toString()))
+    		return;
+    		
     	if(result!=null) {
     		if(Server.canPlayerAttack(this, result)) {
     			damageOtherPlayer(result);
