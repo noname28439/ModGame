@@ -7,9 +7,43 @@ public class Tile {
 	HIGHWAY = 1,
 	WALL = 2,
 	TRAP = 3,
-	TOWER = 4
+	TOWER = 4,
+	CRAFTING_STATION = 5,
+	ORE_1 = 6,
+	ORE_2 = 7,
+	ORE_3 = 8
 	;
 	
+	
+	public static int[] getIngredientsForTileCraft(int ItemID) {
+		switch (ItemID) {
+		case 1:
+			return new int[] {1,1,0};
+		case 2:
+			return new int[] {5,2,0};
+		case 3:
+			return new int[] {2,5,0};
+		case 4:
+			return new int[] {10,10,0};
+		case 5:
+			return new int[] {25,50,0};
+
+		default:
+			return null;
+		}
+	}
+	
+	public static boolean isCraftable(Tile standingOn, int ToCraftTileID) {
+		if(standingOn.getID()==Tile.CRAFTING_STATION) {
+			return true;
+		}else {
+			if(ToCraftTileID==TOWER||ToCraftTileID==TRAP) {
+				return false;
+			}else {
+				return true;
+			}
+		}
+	}
 	
 	
 	private String owner;

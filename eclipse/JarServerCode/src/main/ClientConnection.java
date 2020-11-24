@@ -27,6 +27,9 @@ public class ClientConnection implements Runnable{
 	int x=0,y=0;
 	int points = 0;
 	
+	Integer[] inventory;
+	
+	
 	//Ingame Functions
 	int currentTileKey = 0;
 	boolean sneaking = false;
@@ -49,6 +52,10 @@ public class ClientConnection implements Runnable{
     	//Set basic Player values
     	hp = Settings.player_hp_spawn;
     	
+    	inventory = new Integer[Item.SIZE];
+    	for(int i = 0; i<inventory.length;i++) {
+    		inventory[i]=0;
+    	}
     	
     	resetPosition();
     	
@@ -107,6 +114,22 @@ public class ClientConnection implements Runnable{
     	}
     	
     }
+    
+    void mineOnCurrentTile() {
+    	Tile standingOn = World.getTile(x, y);
+    	int itemID = Item.getItemIDfromTileID(standingOn.getID());
+    	
+    	inventory[itemID]++;
+    	
+    	punish(Item.getMineDelayForItem(itemID));
+    	
+    }
+    
+    boolean canCraftAdvanced() {
+    	return (World.getTile(x, y).getID()==Tile.CRAFTING_STATION);
+    }
+    
+    
     
     public void attackpos(int x, int y) {
     		if(Server.canPlayerAttackPos(this, x, y)) {
@@ -191,14 +214,18 @@ public class ClientConnection implements Runnable{
 			case 4:	//Tower
 				currentAttackRadius=Settings.player_attack_tower_radius;
 				for_move_set_x_and_y(tox,toy);
+				punish(Settings.delay_playerMovement_normal);
 			break;
 
 			default:
-				try {
-					throw new Exception("Invalid TileID at "+x+"|"+y);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				currentAttackRadius=Settings.player_attack_tower_radius;
+				for_move_set_x_and_y(tox,toy);
+				punish(Settings.delay_playerMovement_normal);
+//				try {
+//					throw new Exception("Invalid TileID at "+x+"|"+y);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 				break;
 			}
     	}else {
@@ -278,6 +305,14 @@ public class ClientConnection implements Runnable{
     	createSpecialTileAtSpecificPos(this.x, this.y, Tile.TRAP);
     	punish(Settings.delay_mapInteraction_createTrap);
     }
+    public void createTowerAtCurrentPos() {
+    	createSpecialTileAtSpecificPos(this.x, this.y, Tile.TOWER);
+    	punish(Settings.delay_mapInteraction_createTrap);
+    }
+    public void createCraftingStationAtCurrentPos() {
+    	createSpecialTileAtSpecificPos(this.x, this.y, Tile.CRAFTING_STATION);
+    	punish(Settings.delay_mapInteraction_createTrap);
+    }
     
     public void resetTileAtCurrentPos() {
     	createSpecialTileAtSpecificPos(this.x, this.y, Tile.NORMAL);
@@ -286,10 +321,15 @@ public class ClientConnection implements Runnable{
     
     public void createSpecialTileAtSpecificPos(int x, int y, int tileID) {
     	if(!(Server.calculateDistanceBetweenPoints(this.x, this.y, x, y)>Settings.player_interact_tile_radius)) {
-    		World.getTile(x, y).setID(tileID);
-    		World.getTile(x, y).setKey(currentTileKey);
-    		World.getTile(x, y).setOwner(name);
-    		sendFeedbackMessage("tileUpdate["+x+"|"+y+"]", true);
+    		if(craft(tileID)) {
+    			World.getTile(x, y).setID(tileID);
+        		World.getTile(x, y).setKey(currentTileKey);
+        		World.getTile(x, y).setOwner(name);
+        		sendFeedbackMessage("tileUpdate["+x+"|"+y+"]", true);
+    		}else {
+    			sendFeedbackMessage("tileUpdate["+x+"|"+y+"](ingredients)", false);
+    		}
+    		
     	}else
     		punish(Settings.delay_mapInteraction_resetTileID__OUT_OF_RANGE);
     	
@@ -316,6 +356,28 @@ public class ClientConnection implements Runnable{
     
     public void resetHP() {
     	hp=Settings.player_hp_spawn;
+    }
+    
+    boolean craft(int item) {
+    	
+    	int[] ingredients = Tile.getIngredientsForTileCraft(item);
+    	
+    	
+    	//Test if inventory contains needed Items
+    	for(int i = 0; i<ingredients.length;i++) {
+    		if(!(inventory[i]>=ingredients[i]))
+    			return false;	
+    	}
+    	//Test if player needs to stand on Crafting Station and if he needs to, if he is
+    	if(!Tile.isCraftable(World.getTile(x, y), item)) {
+    		return false;
+    	}
+    	
+    	for(int i = 0; i<ingredients.length;i++) {
+    		inventory[i]-=ingredients[i];
+    	}
+    	
+    	return true;
     }
     
 	@Override
@@ -365,11 +427,29 @@ public class ClientConnection implements Runnable{
 						
 						
 					}
+					
+					if(args[0].equalsIgnoreCase("isStunned")) {
+						returnDataRequestResult("isStunned", isStunned());
+					}
+					
+					
+					if(args[0].equalsIgnoreCase("inventory")) {
+						int requestID = Integer.valueOf(args[1]);
+						returnDataRequestResult("inventory_"+String.valueOf(requestID), inventory[requestID]);
+					}
+					
+					if(!isStunned())
+						if(args[0].equalsIgnoreCase("mine")) {
+							mineOnCurrentTile();
+						}
+					
+					
 					if(!isStunned())
 					if(args[0].equalsIgnoreCase("attack")) {
 						attack(args[1]);
 					}
 					
+					if(!isStunned())
 					if(args[0].equalsIgnoreCase("attackpos")) {
 						attackpos(Integer.valueOf(args[1]), Integer.valueOf(args[2]));
 					}
@@ -395,6 +475,12 @@ public class ClientConnection implements Runnable{
 						if(args[1].equalsIgnoreCase("trap")) {
 							createTrapAtCurrentPos();
 						}
+						if(args[1].equalsIgnoreCase("tower")) {
+							createTowerAtCurrentPos();
+						}
+						if(args[1].equalsIgnoreCase("craftingStation")) {
+							createCraftingStationAtCurrentPos();
+						}
 						if(args[1].equalsIgnoreCase("normal")) {
 							Tile before = World.getTile(x, y);
 							if(before.getKey()==currentTileKey)
@@ -418,9 +504,9 @@ public class ClientConnection implements Runnable{
 							
 							if(World.getTile(x, y)!=null) {
 								sendMessage("map:tileID:"+x+":"+y+":"+World.getTile(x, y).getID());
-								punish(Settings.delay_maprequest_tileID);
+								//punish(Settings.delay_maprequest_tileID);
 							}else {
-								punish(Settings.delay_tile_request_outOfMap);
+								//punish(Settings.delay_tile_request_outOfMap);
 							}
 							
 						}
@@ -429,9 +515,12 @@ public class ClientConnection implements Runnable{
 							int y = Integer.valueOf(args[3]);
 							
 							sendMessage("map:isNormal:"+x+":"+y+":"+(World.getTile(x, y).getID()==0));
-							punish(Settings.delay_maprequest_isNormal);
+							//punish(Settings.delay_maprequest_isNormal);
 						}
 					}
+					
+					
+					
 					
 					
 					if(args[0].equalsIgnoreCase("data")) {
@@ -456,7 +545,6 @@ public class ClientConnection implements Runnable{
 							
 							
 							if(args[2].equalsIgnoreCase("mapsize")) {returnDataRequestResult("mapsize", Settings.mapsize);}
-							
 							
 							
 							

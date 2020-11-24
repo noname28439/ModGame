@@ -88,6 +88,8 @@ public class Settings {
     public static int player_hp_max = 200;
     public static int player_hp_kill_regen = player_hp_max/2;
     
+    public static int map_noTile_possibility = 2500;
+    
     public static int trap_damage = 100;
     
     //DelayBalance
@@ -96,20 +98,23 @@ public class Settings {
     delay_maprequest_isNormal = 0.02f,
     delay_maprequest_tileID = 1,
     delay_chat_send = 0.1f,
-    delay_mapInteraction_createWall = 5,
-    delay_mapInteraction_createHighway = 3,
-    delay_mapInteraction_createTrap = 10,
+    delay_mapInteraction_createWall = 1,
+    delay_mapInteraction_createHighway = 2,
+    delay_mapInteraction_createTrap = 5,
     delay_mapInteraction_resetTile = 2,
     delay_mapInteraction_resetTileID__OUT_OF_RANGE = 2,
     delay_playerMovement__RANGE = 0.5f,
-    delay_playerMovement_wall__WALL_KEY = 0.2f,
-    delay_playerMovement_wall = 0.1f,
-    delay_playerMovement_normal = 0.1f,
+    delay_playerMovement_wall__WALL_KEY = 0.4f,
+    delay_playerMovement_wall = 0.2f,
+    delay_playerMovement_normal = 0.2f,
     delay_playerMovement__OUT_OF_MAP = 1,
     delay_playerAttack__NAME_NOT_FOUND = 3,
     delay_playerAttack__OUT_OF_RANGE = 1,
     delay_playerAttack = 0.1f,
-    delay_tile_request_outOfMap = 0.1f
+    delay_tile_request_outOfMap = 0.1f,
+    delay_item_mine_item1 = 0.1f,
+    delay_item_mine_item2 = 0.2f,
+    delay_item_mine_item3 = 10
     ;
     	
 }
