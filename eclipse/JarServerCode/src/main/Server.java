@@ -125,16 +125,17 @@ public class Server {
     
 	public static void trapDamagePlayer(ClientConnection target, Tile trapTile) {
     	target.hp-=Settings.trap_damage;
-    	if(target.checkDead()) {
+    	boolean death = target.checkDead();
+    	if(death) {
     		target.respawn();
     	}
 		if(getConnectionByName(trapTile.getOwner())!=null) {
 			//TrapOwner online
 			ClientConnection trapOwner = getConnectionByName(trapTile.getOwner());
 			trapOwner.sendFeedbackMessage("trap["+target.name+"]", true);
-			if(target.checkDead()) {
+			if(death) {
 				//Target has no more HP
-				trapOwner.points+=Integer.valueOf(target.points/10);
+				trapOwner.points+=Integer.valueOf(target.points/2);
 				trapOwner.points++;
 				Server.clog(trapOwner.name+" trapped "+target.name+" to death!");
 			}

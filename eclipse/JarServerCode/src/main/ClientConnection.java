@@ -150,7 +150,7 @@ public class ClientConnection implements Runnable{
 			//Target has no more HP
 			if(hp<Settings.player_hp_kill_regen)
 				hp=Settings.player_hp_kill_regen;
-			points+=Integer.valueOf(target.points/10);
+			points+=Integer.valueOf(target.points/5);
 			points++;
 			target.respawn();
 			Server.clog(name+" killed "+target.name);
@@ -201,11 +201,11 @@ public class ClientConnection implements Runnable{
 				}
 				break;
 			case 3:	//Trap
+				for_move_set_x_and_y(tox,toy);
 				currentAttackRadius=Settings.player_attack_default_radius;
 				if(currentTileKey != jumpTo.getKey()) {
 					Server.trapDamagePlayer(this, jumpTo);
 				}
-				for_move_set_x_and_y(tox,toy);
 				
 			break;
 			
@@ -344,10 +344,10 @@ public class ClientConnection implements Runnable{
     }
     
     public void respawn() {
-    	resetPosition();
 		resetKillstreak();
 		resetHP();
 		resetInventory();
+		resetPosition();
     }
     
     public void resetPosition() {
@@ -374,7 +374,7 @@ public class ClientConnection implements Runnable{
     	//Test if inventory contains needed Items
     	for(int i = 0; i<ingredients.length;i++) {
     		if(!(inventory[i]>=ingredients[i]))
-    			return false;	
+    			return false;
     	}
     	//Test if player needs to stand on Crafting Station and if he needs to, if he is
     	if(!Tile.isCraftable(World.getTile(x, y), item)) {

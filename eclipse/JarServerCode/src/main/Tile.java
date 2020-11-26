@@ -34,6 +34,9 @@ public class Tile {
 	}
 	
 	public static boolean isCraftable(Tile standingOn, int ToCraftTileID) {
+		//This Method is disabled, because There was a logical Mistake in the Crafging Station System
+		return true;
+		/*
 		if(standingOn.getID()==Tile.CRAFTING_STATION) {
 			return true;
 		}else {
@@ -43,6 +46,7 @@ public class Tile {
 				return true;
 			}
 		}
+		*/
 	}
 	
 	
