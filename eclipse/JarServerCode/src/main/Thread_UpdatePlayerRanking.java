@@ -30,7 +30,7 @@ public class Thread_UpdatePlayerRanking implements Runnable{
 			String pn = "";
 			
 			for(int i = 0; i<Server.connections.size();i++) {
-				pn+=(Server.connections.get(i).name+":"+Server.connections.get(i).points+"\n");
+				pn+=(Server.connections.get(i).name+":"+Server.connections.get(i).points+":"+Server.connections.get(i).x+":"+Server.connections.get(i).y+":"+Server.connections.get(i).hp+"\n");
 			}
 			//pn.replaceFirst("\n", "");
 			
