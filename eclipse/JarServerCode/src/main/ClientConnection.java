@@ -27,7 +27,7 @@ public class ClientConnection implements Runnable{
 	int x=0,y=0;
 	int points = 0;
 	
-	Integer[] inventory;
+	int[] inventory;
 	
 	
 	//Ingame Functions
@@ -52,7 +52,7 @@ public class ClientConnection implements Runnable{
     	//Set basic Player values
     	hp = Settings.player_hp_spawn;
     	
-    	inventory = new Integer[Item.SIZE];
+    	inventory = new int[Item.SIZE];
     	for(int i = 0; i<inventory.length;i++) {
     		inventory[i]=0;
     	}
@@ -152,9 +152,7 @@ public class ClientConnection implements Runnable{
 				hp=Settings.player_hp_kill_regen;
 			points+=Integer.valueOf(target.points/10);
 			points++;
-			target.resetPosition();
-			target.resetKillstreak();
-			target.resetHP();
+			target.respawn();
 			Server.clog(name+" killed "+target.name);
 		}
     }
@@ -345,6 +343,13 @@ public class ClientConnection implements Runnable{
     	return hp<=0;
     }
     
+    public void respawn() {
+    	resetPosition();
+		resetKillstreak();
+		resetHP();
+		resetInventory();
+    }
+    
     public void resetPosition() {
     	x=(Settings.mapsize/2)+(new Random().nextInt(Settings.spawnRadius*2)-Settings.spawnRadius);
     	y=(Settings.mapsize/2)+(new Random().nextInt(Settings.spawnRadius*2)-Settings.spawnRadius);
@@ -352,6 +357,9 @@ public class ClientConnection implements Runnable{
     
     public void resetKillstreak() {
     	points=0;
+    }
+    public void resetInventory() {
+    	inventory = new int[Item.SIZE];
     }
     
     public void resetHP() {

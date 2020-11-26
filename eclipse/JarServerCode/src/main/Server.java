@@ -125,9 +125,9 @@ public class Server {
     
 	public static void trapDamagePlayer(ClientConnection target, Tile trapTile) {
     	target.hp-=Settings.trap_damage;
-    	target.resetPosition();
-		target.resetKillstreak();
-		target.resetHP();
+    	if(target.checkDead()) {
+    		target.respawn();
+    	}
 		if(getConnectionByName(trapTile.getOwner())!=null) {
 			//TrapOwner online
 			ClientConnection trapOwner = getConnectionByName(trapTile.getOwner());
