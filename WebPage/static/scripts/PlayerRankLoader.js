@@ -6,7 +6,6 @@ var URL = "/rank/requestAPI";
 
 
 
-
 //first load, when the Page is loaded
 load_API_json_page("POST",URL);
 
@@ -37,10 +36,10 @@ function load_API_json_page(method, url) {
             rcvstr = sortList(rcvstr);
 
             for(var i = 0; i<rcvstr.length;i++){
-
+                console.log(rcvstr[i]);
             var rcvargs = rcvstr[i].split(":");
 
-                playerRankDiv.innerHTML+="<li><code class='PlayerRankSystemPlayerLine'>"+rcvargs[0] + " --> "+rcvargs[1]+" [Points]</code></li>"
+                playerRankDiv.innerHTML+="<li><code class='PlayerRankSystemPlayerLine'>"+rcvargs[0] + "["+rcvargs[4]+"] --> "+rcvargs[1]+"</code></li>"
             }
 
 
@@ -57,7 +56,11 @@ function sortList(list){
 
     var numlist = [];
     var nameList = [];
+    var xList = [];
+    var yList = [];
+    var hpList = [];
     for(var i = 0; i< list.length;i++){
+        //console.log(list[i]);
         numlist.push(list[i].split(":")[1]);
         nameList.push(list[i].split(":")[0]);
     }
@@ -75,15 +78,22 @@ function sortList(list){
             if(list[ii].split(":")[1]==number) {
                 var isNameAlreadyInTable = false;
                 for(var iii = 0; iii<toReturn.length;iii++) {
-                    if(toReturn[iii]==list[ii].split(":")[0]+":"+number.toString()){
+                    if(toReturn[iii].startsWith(list[ii].split(":")[0]+":"+number.toString())){
                         isNameAlreadyInTable = true;
                     }
                 }
-                if(!isNameAlreadyInTable)
+                if(!isNameAlreadyInTable){
+                    //console.log(list[ii]);
                     foundName = list[ii].split(":")[0];
+                    foundHP=list[ii].split(":")[4];
+                    foundX = list[ii].split(":")[2];
+                    foundY = list[ii].split(":")[3];
+                }
+
             }
         }
-        toReturn.push(foundName+":"+number.toString())
+        toReturn.push(foundName+":"+number.toString()+":"+foundX+":"+foundY+":"+foundHP)
+        //toReturn.push(foundName+":"+number.toString())
     }
 
 

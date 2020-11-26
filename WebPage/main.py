@@ -147,11 +147,6 @@ def home():
     else:
         return render_template("login.html")
 
-@app.route("/Jonathan")
-def jonathan():
-    return render_template("jonathan.html")
-
-
 
 
 if __name__ == "__main__":
