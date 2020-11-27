@@ -152,7 +152,7 @@ public class ClientConnection implements Runnable{
 				hp=Settings.player_hp_kill_regen;
 			points+=Integer.valueOf(target.points/5);
 			points++;
-			target.respawn();
+			target.respawn(this);
 			Server.clog(name+" killed "+target.name);
 		}
     }
@@ -344,6 +344,19 @@ public class ClientConnection implements Runnable{
     }
     
     public void respawn() {
+		resetKillstreak();
+		resetHP();
+		resetInventory();
+		resetPosition();
+    }
+    public void respawn(ClientConnection killer) {
+    	if(Settings.itemDrops) {
+    		if(killer!=null) {
+    			for(int i = 0; i<inventory.length;i++) {
+    				killer.inventory[i]+=inventory[i];
+    			}
+    		}
+    	}
 		resetKillstreak();
 		resetHP();
 		resetInventory();

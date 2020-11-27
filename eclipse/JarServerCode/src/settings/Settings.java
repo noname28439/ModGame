@@ -69,6 +69,7 @@ public class Settings {
     
     
     public static boolean friendlyFire = false;			//false: Spieler der selben IP können sich nicht angereifen | true: Spieler der selben IP können sich angreifen
+    public static boolean itemDrops = true;
     
     public static String connection_message_seperator = ":";
     public static int ClientConnectionLimit = 3;
