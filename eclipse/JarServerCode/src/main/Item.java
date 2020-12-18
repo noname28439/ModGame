@@ -8,7 +8,7 @@ public class Item {
 	ITEM_1 = 0, 
 	ITEM_2 = 1,
 	ITEM_3 = 2;
-	//If you want to implement a new Item you must change the SIZE to SIZE++;
+	//If you want to implement a new Item you must change the SIZE to SIZE++; AND remake the the drop Function
 	public static int SIZE = 3;		//Amount of ItemTypes. Has to be changed when new Items are implemented!!!
 	
 	

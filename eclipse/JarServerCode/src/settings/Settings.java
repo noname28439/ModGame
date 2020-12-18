@@ -88,6 +88,7 @@ public class Settings {
     public static int player_sneaking_detectRange = 30;
     public static int player_hp_max = 200;
     public static int player_hp_kill_regen = player_hp_max/2;
+    public static int player_drop_radius = 8;
     
     public static int map_noTile_possibility = 2500;
     
@@ -112,6 +113,7 @@ public class Settings {
     delay_playerAttack__NAME_NOT_FOUND = 3,
     delay_playerAttack__OUT_OF_RANGE = 1,
     delay_playerAttack = 0.1f,
+    delay_playerDrop = 1f,
     delay_tile_request_outOfMap = 0.1f,
     delay_item_mine_item1 = 0.1f,
     delay_item_mine_item2 = 0.2f,

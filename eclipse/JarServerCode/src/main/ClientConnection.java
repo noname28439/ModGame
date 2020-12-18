@@ -99,7 +99,7 @@ public class ClientConnection implements Runnable{
     		return;
     		
     	if(result!=null) {
-    		if(Server.canPlayerAttack(this, result)) {
+    		if(Server.canPlayerAttackPlayer(this, result)) {
     			damageOtherPlayer(result);
         		punish(Settings.delay_playerAttack);
     		}else {
@@ -275,7 +275,23 @@ public class ClientConnection implements Runnable{
 	    	return (getDelay()>0);
 	    }
     
-	    
+	    void dropItems(ClientConnection target, int[] ingredients){
+	    	punish(Settings.delay_playerDrop);
+	    	if(Server.canPlayerDropPlayer(this, target)) {
+	    		boolean hasItems = true;
+		    	//Test if inventory contains needed Items
+		    	for(int i = 0; i<ingredients.length;i++) {
+		    		if(!(inventory[i]>=ingredients[i]))
+		    			hasItems = false;
+		    	}
+		    	
+		    	//removing Items from PlayerInventory and adding them to the target's one
+		    	for(int i = 0; i<ingredients.length;i++) {
+		    		inventory[i]-=ingredients[i];
+		    		target.inventory[i]+=ingredients[i];
+		    	}
+	    	}
+	    }
 	    
 	    
     
@@ -486,6 +502,17 @@ public class ClientConnection implements Runnable{
 						move(Float.valueOf(args[1]), Float.valueOf(args[2]));
 					}
 					
+					if(!isStunned())
+					if(args[0].equalsIgnoreCase("drop")) {
+						if(Server.getConnectionByName(args[1])!=null) {
+							ClientConnection target = Server.getConnectionByName(args[1]);
+							dropItems(target, new int[] {Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4])});
+							
+						}
+							
+						
+					}
+					
 					if(args[0].equalsIgnoreCase("tileInteraction")) {
 						if(args[1].equalsIgnoreCase("wall")) {
 							createWallAtCurrentPos();
@@ -511,6 +538,8 @@ public class ClientConnection implements Runnable{
 						}
 						
 					}
+					
+					
 					
 					if(!isStunned())
 					if(args[0].equalsIgnoreCase("chat")) {
