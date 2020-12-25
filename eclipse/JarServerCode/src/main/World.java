@@ -19,7 +19,10 @@ public class World {
 						tiles[x][y]=new Tile(Tile.ORE_2);
 					}
 				}else {
-					tiles[x][y]=new Tile(Tile.NORMAL);
+					if(new Random().nextInt(Settings.map_airstrike_launcher_possibility)==0)
+						tiles[x][y]=new Tile(Tile.AIRSTRIKE_LAUNCHER);
+					else
+						tiles[x][y]=new Tile(Tile.NORMAL);
 				}
 				
 			}

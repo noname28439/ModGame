@@ -91,8 +91,12 @@ public class Settings {
     public static int player_drop_radius = 8;
     
     public static int map_noTile_possibility = 2500;
+    public static int map_airstrike_launcher_possibility = 500;
     
     public static int trap_damage = 100;
+    public static int airstrike_radius = 10;
+    public static int airstrike_damage = 500;
+    public static int[] airstrike_resources = new int[] {100, 200, 0};
     
     //DelayBalance
     public static float

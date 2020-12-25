@@ -11,7 +11,8 @@ public class Tile {
 	CRAFTING_STATION = 5,
 	ORE_1 = 6,
 	ORE_2 = 7,
-	ORE_3 = 8
+	ORE_3 = 8,
+	AIRSTRIKE_LAUNCHER = 9
 	;
 	
 	

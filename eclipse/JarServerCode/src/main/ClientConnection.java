@@ -234,6 +234,32 @@ public class ClientConnection implements Runnable{
     }
     
     
+    public void airstrike(int x, int y) {
+    	ArrayList<ClientConnection> playersOnMap = Server.getConnections();
+    	for(int i = 0; i<playersOnMap.size();i++) {
+    		
+    		ClientConnection target = playersOnMap.get(i);
+    		if(Collision.CircleToCircle(x, y, Settings.airstrike_radius, target.x, y, 1)) {
+    			//Player is in Damage Range
+    		    target.hp-=Settings.airstrike_damage;
+    			sendFeedbackMessage("attack["+target.name+"]", true);
+    			if(target.checkDead()) {
+    				sendFeedbackMessage("kill", true);
+    				//Target has no more HP
+    				if(hp<Settings.player_hp_kill_regen)
+    					hp=Settings.player_hp_kill_regen;
+    				points+=Integer.valueOf(target.points/5);
+    				points++;
+    				target.respawn(this);
+    				Server.clog(name+" killed "+target.name);
+    			}
+    		    
+    		}
+    	}
+    	
+    	
+    }
+    
     
     
     //delay Handeler
@@ -476,9 +502,33 @@ public class ClientConnection implements Runnable{
 					}
 					
 					if(!isStunned())
-						if(args[0].equalsIgnoreCase("mine")) {
-							mineOnCurrentTile();
+					if(args[0].equalsIgnoreCase("mine")) {
+						mineOnCurrentTile();
+					}
+					
+					if(!isStunned())
+					if(args[0].equalsIgnoreCase("airstrike")) {
+						if(World.getTile(x, y).getID()==Tile.AIRSTRIKE_LAUNCHER) {
+							
+							int[] ingredients = Settings.airstrike_resources;
+					    	
+					    	 boolean canAfford = true;
+							
+					    	//Test if inventory contains needed Items
+					    	for(int i = 0; i<ingredients.length;i++) {
+					    		if(!(inventory[i]>=ingredients[i]))
+					    			canAfford=false;
+					    	}
+					    	
+					    	if(canAfford) {
+						    	for(int i = 0; i<ingredients.length;i++) {
+						    		inventory[i]-=ingredients[i];
+						    	}
+								
+								airstrike(Integer.valueOf(args[1]), Integer.valueOf(args[2]));
+					    	}
 						}
+					}
 					
 					
 					if(!isStunned())
