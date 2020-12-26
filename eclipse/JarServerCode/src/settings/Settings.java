@@ -95,8 +95,8 @@ public class Settings {
     
     public static int trap_damage = 100;
     public static int airstrike_radius = 10;
-    public static int airstrike_damage = 500;
-    public static int[] airstrike_resources = new int[] {100, 200, 0};
+    public static int airstrike_damage = (int)(player_hp_max*0.75);
+    public static int[] airstrike_resources = new int[] {1000, 500, 0};
     
     //DelayBalance
     public static float
@@ -121,7 +121,8 @@ public class Settings {
     delay_tile_request_outOfMap = 0.1f,
     delay_item_mine_item1 = 0.1f,
     delay_item_mine_item2 = 0.2f,
-    delay_item_mine_item3 = 10
+    delay_item_mine_item3 = 10,
+    delay_airstrike_shoot = 30
     ;
     	
 }

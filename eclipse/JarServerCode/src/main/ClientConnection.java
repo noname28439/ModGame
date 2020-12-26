@@ -525,6 +525,7 @@ public class ClientConnection implements Runnable{
 						    		inventory[i]-=ingredients[i];
 						    	}
 								
+						    	punish(Settings.delay_airstrike_shoot);
 								airstrike(Integer.valueOf(args[1]), Integer.valueOf(args[2]));
 					    	}
 						}
