@@ -13,8 +13,7 @@ import settings.Settings;
 public class Thread_UpdatePlayerRanking implements Runnable{
 	
 	
-	static boolean debug = false,
-			transmitCoords = false;
+	static boolean debug = false;
 	
 	@Override
 	public void run() {
@@ -31,6 +30,7 @@ public class Thread_UpdatePlayerRanking implements Runnable{
 			String pn = "";
 			
 			for(int i = 0; i<Server.connections.size();i++) {
+				boolean transmitCoords = !Server.connections.get(i).sneaking;
 				if(transmitCoords) {
 					pn+=(Server.connections.get(i).name+":"+Server.connections.get(i).points+":"+Server.connections.get(i).x+":"+Server.connections.get(i).y+":"+(int)Server.connections.get(i).hp+"\n");
 				}else {

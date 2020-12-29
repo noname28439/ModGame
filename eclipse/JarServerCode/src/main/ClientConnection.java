@@ -29,7 +29,6 @@ public class ClientConnection implements Runnable{
 	
 	int[] inventory;
 	
-	
 	//Ingame Functions
 	int currentTileKey = 0;
 	boolean sneaking = false;
@@ -39,7 +38,6 @@ public class ClientConnection implements Runnable{
 	
     public ClientConnection(Socket connection){
     	this.connection = connection;
-    	
     	
     	try {
 			out = new PrintStream(connection.getOutputStream());

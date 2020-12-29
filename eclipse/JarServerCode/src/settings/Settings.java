@@ -13,6 +13,7 @@ public class Settings {
 
 	
 	public static void loadFromFile(String path) {
+		System.out.println("-------------------------"+"Loading Config"+"-------------------------");
 		ArrayList<String> content = DateiReader.read(Paths.get(path));
 		
 		for(String cl : content) {
@@ -56,6 +57,7 @@ public class Settings {
 			}
 			
 		}
+		System.out.println("-------------------------"+"Finished Config Load"+"-------------------------");
 		
 	}
 	

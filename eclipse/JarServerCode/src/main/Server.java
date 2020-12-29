@@ -15,7 +15,7 @@ public class Server {
 
     static ServerSocket server;
 
-    public static ArrayList<ClientConnection> connections = new ArrayList<>();
+    static ArrayList<ClientConnection> connections = new ArrayList<>();
     
     
     
@@ -161,7 +161,7 @@ public class Server {
         
         try {
             server = new ServerSocket(Settings.PORT);
-            clog("ServerSocket successfully started");
+            clog("ServerSocket successfully started on port "+Settings.PORT);
         }catch (IOException e){
             e.printStackTrace();
         }
